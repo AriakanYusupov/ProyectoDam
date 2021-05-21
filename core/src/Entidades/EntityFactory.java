@@ -27,18 +27,31 @@ public class EntityFactory {
 	 * @return          jugador.
 	 */
 	public PlayerEntity createPlayer(World world, Vector2 position) {
-		Texture playerTexture = manager.get("Defensor.png");
+		Texture playerTexture = manager.get("defensor.png");
 		return new PlayerEntity(world, playerTexture, position);
 	}
 	/**
 	 * Crea la entidad alien
 	 * @param world     mundo
-	 * @param position  posición inicial (metros,metros).
-	 * @return          alien.
+	 * @param x  posición X inicial (metros)
+	 * @param y  posición Y inicial (metros)
+	 * @return alien.
 	 */
-	public AlienEntity createAlien(World world, Vector2 position) {
-		Texture playerTexture = manager.get("Alien_1.png");
-		return new AlienEntity(world, playerTexture, position);
+	public AlienEntity createAlien(World world, float x, float y) {
+		Texture alienTexture = manager.get("alien1.png");
+		return new AlienEntity(world, alienTexture, x, y);
+	}
+
+	/**
+	 * Crea la entidad alien
+	 * @param world     mundo
+	 * @param x  posición X inicial (metros)
+	 * @param y  posición Y inicial (metros)
+	 * @return laser.
+	 */
+	public LaserEntity createLaser(World world, float x, float y) {
+		Texture laserTexture = manager.get("laser.png");
+		return new LaserEntity(world, laserTexture, x, y);
 	}
 
 

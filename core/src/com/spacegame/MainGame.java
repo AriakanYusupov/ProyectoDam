@@ -2,11 +2,9 @@ package com.spacegame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-
-import box2d.Box2DScreen;
 
 /**
  * Clase que contiene los metodos para crear las pantallas
@@ -23,7 +21,7 @@ public class MainGame extends Game {
 	/**
 	 * Pantallas del juego
 	 */
-	public BaseScreen loadingScreen, initScreen, logInScreen, menuScreen, gameScreen, gameOverScreen, scoreScreen;
+	public BaseScreen loadingScreen, initScreen, logInScreen, menuScreen, gameScreen, gameOverScreen, scoreScreen, registroScreen;
 
 	/**
 	 * método para inicializar el controlador de recursos.
@@ -34,19 +32,19 @@ public class MainGame extends Game {
 
 		manager = new AssetManager();
 		//los parámentros son primero el nombre del archivo y segundo el tipo de archivo
-		manager.load("Defensor.png", Texture.class);
-		manager.load("Alien_1.png", Texture.class);
-		manager.load("Alien_2.png", Texture.class);
-		manager.load("Laser.png",Texture.class);
+		manager.load("defensor.png", Texture.class);
+		manager.load("alien1.png", Texture.class);
+		//manager.load("alien2.png", Texture.class);
+		manager.load("laser.png",Texture.class);
 
-		manager.load("Sound/Cuenta_Atras.ogg", Sound.class);
-		manager.load("Sound/Explosion_Corta.ogg", Sound.class);
-		manager.load("Sound/Explosion_Larga.ogg", Sound.class);
-		manager.load("Sound/Fin_Nivel.ogg", Sound.class);
-		manager.load("Sound/Laser_Alien.ogg", Sound.class);
-		manager.load("Sound/Laser_Defensor.ogg", Sound.class);
-		manager.load("Sound/Lose.ogg", Sound.class);
-		manager.load("Music/Punky.mp3", Music.class);
+		manager.load("sound/Cuenta_Atras.ogg", Sound.class);
+		manager.load("sound/Explosion_Corta.ogg", Sound.class);
+		manager.load("sound/Explosion_Larga.ogg", Sound.class);
+		manager.load("sound/Fin_Nivel.ogg", Sound.class);
+		manager.load("sound/Laser_Alien.ogg", Sound.class);
+		manager.load("sound/Laser_Defensor.ogg", Sound.class);
+		manager.load("sound/Lose.ogg", Sound.class);
+		manager.load("music/Punky.mp3", Music.class);
 
 		// Enter the loading screen to load the assets.
 		loadingScreen = new LoadingScreen(this);
@@ -64,8 +62,9 @@ public class MainGame extends Game {
 		gameScreen = new GameScreen(this);
 		gameOverScreen = new GameOverScreen(this);
 		scoreScreen= new ScoreScreen(this);
+		registroScreen = new RegistroScreen(this);
 
-		setScreen(menuScreen);
+		setScreen(logInScreen);
 	}
 
 	public AssetManager getManager() {

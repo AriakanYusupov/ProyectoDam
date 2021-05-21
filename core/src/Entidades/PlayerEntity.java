@@ -1,6 +1,5 @@
 package Entidades;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.spacegame.Constantes;
 
 /**
  * Clase Entidad del jugador
@@ -59,7 +59,7 @@ public class PlayerEntity extends Actor{
 		box.dispose();
 
 		//se pone en un tamaño para que se vea, hay que usar la clase Constantes
-		//setSize();
+		setSize(Constantes.PIXEL_A_METRO, Constantes.PIXEL_A_METRO );
 	}
 
 	/**
@@ -70,8 +70,9 @@ public class PlayerEntity extends Actor{
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// hay que pintar el cuerpo de la nave según se mueva usando las constantes
-		//setPosition(x, y);
-		//batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+		setPosition((body.getPosition().x - 5.0f) * Constantes.PIXEL_A_METRO,
+				(body.getPosition().y - 5.0f) * Constantes.PIXEL_A_METRO);
+		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**
@@ -82,4 +83,16 @@ public class PlayerEntity extends Actor{
 	public void act(float delta) {
 	}
 
+	public void detach() {
+		body.destroyFixture(fixture);
+		world.destroyBody(body);
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
 }

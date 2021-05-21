@@ -30,17 +30,17 @@ public class LoadingScreen extends BaseScreen {
 	 */
 	private Label loading;
 
-	public LoadingScreen(com.spacegame.MainGame game) {
+	public LoadingScreen(MainGame game) {
 		super(game);
 
 		// se generan el stage y la skin.
-		stage = new Stage(new FitViewport(640, 360));
+		stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
 		// texto usando la skin
 		loading = new Label("Cargando...", skin);
 		//posición del texto
-		loading.setPosition(320 - loading.getWidth() / 2, 180 - loading.getHeight() / 2);
+		loading.setPosition(Constantes.ANCHO_PANTALLA/2 - loading.getWidth(), Constantes.ALTO_PANTALLA /2 - loading.getHeight());
 		stage.addActor(loading);
 	}
 
@@ -69,7 +69,7 @@ public class LoadingScreen extends BaseScreen {
 	}
 
 	/**
-	 * método para eliminar de memoria lo que ya no se usa
+	 * método para eliminar de la memoria lo que ya no se usa
 	 */
 	@Override
 	public void dispose() {

@@ -1,16 +1,15 @@
 package Entidades;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.spacegame.Constantes;
 
 /**
  * Clase Entidad del jugador
@@ -33,7 +32,7 @@ public class AlienEntity extends Actor{
 	private boolean alive = true;
 
 
-	public AlienEntity(World world, Texture texture, Vector2 position) {
+	public AlienEntity(World world, Texture texture, float x, float y) {
 		this.world = world;
 		this.texture = texture;
 
@@ -41,7 +40,7 @@ public class AlienEntity extends Actor{
 		//definición del body
 		BodyDef def = new BodyDef();
 		//posición incial
-		def.position.set(position);
+		def.position.set(x,y);
 		//tipo de body
 		def.type = BodyDef.BodyType.DynamicBody;
 		//creamos el body
@@ -60,7 +59,7 @@ public class AlienEntity extends Actor{
 		box.dispose();
 
 		//se pone en un tamaño para que se vea, hay que usar la clase Constantes
-		//setSize();
+		setSize(Constantes.PIXEL_A_METRO, Constantes.PIXEL_A_METRO );
 	}
 
 	/**
@@ -83,6 +82,18 @@ public class AlienEntity extends Actor{
 	public void act(float delta) {
 	}
 
+	public void detach() {
+		body.destroyFixture(fixture);
+		world.destroyBody(body);
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
 }
 
 
