@@ -85,7 +85,7 @@ import Entidades.PlayerEntity;
 			//position = new Vector3(stage.getCamera().position);
 
 			// nuevo World
-			world = new World(new Vector2(0, -10), true);
+			world = new World(new Vector2(0, 0), true);
 			world.setContactListener(new GameContactListener());
 
 			// cargamos el fichero con la skin
@@ -104,12 +104,6 @@ import Entidades.PlayerEntity;
 			labelVidas = new Label ("Vidas:", skin);
 			puntos = new Label("5000", skin);
 			vidas = new Label("3", skin);
-
-			// tamaño y posicion
-			/*labelPuntos.setSize(50, 8);
-			puntos.setSize(100,8);
-			labelVidas.setSize(50, 8);
-			vidas.setSize(50,8);*/
 
 			tablaPuntos.add(labelPuntos).left();
 			tablaPuntos.add(puntos).right();
@@ -133,11 +127,13 @@ import Entidades.PlayerEntity;
 			EntityFactory factory = new EntityFactory(game.getManager());
 
 			// Crea al jugador y lo pone en su posición inicial
-			player = factory.createPlayer(world, new Vector2(Constantes.ANCHO_PANTALLA/2, 100f));
+			//como la escena está en metros hay que calcular el valor central de la pantalla usando la constante de conversión
+			player = factory.createPlayer(world, new Vector2(Constantes.ANCHO_PANTALLA/(Constantes.PIXEL_A_METRO*2), 1f));
 
 			//Crea aliens
 			//listaAliens.add(factory.createAlien(world,Constantes.ANCHO_PANTALLA/2 , 500f));
-			alien = factory.createAlien(world,Constantes.ANCHO_PANTALLA/2 , 500f);
+			alien = factory.createAlien(world,Constantes.ANCHO_PANTALLA/(Constantes.PIXEL_A_METRO*2) ,
+					Constantes.ALTO_PANTALLA/(Constantes.PIXEL_A_METRO*2));
 			//añadimos aliens y jugador
 			/*for (AlienEntity alien : listaAliens)
 				stage.addActor(alien);*/
@@ -147,14 +143,15 @@ import Entidades.PlayerEntity;
 			stage.addActor(tablaPuntos);
 			stage.addActor(tablaVidas);
 
-			//stage.getCamera().position.set(position);
+			stage.getCamera().position.set(Constantes.ANCHO_PANTALLA/2, Constantes.ALTO_PANTALLA/2,0);
 
 			stage.getCamera().update();
 
 
 			// volumen de la música y se activa
-			backgroundMusic.setVolume(0.75f);
+			backgroundMusic.setVolume(0.5f);
 			backgroundMusic.play();
+			System.out.println("pantalla de juego");
 
 		}
 
@@ -192,7 +189,19 @@ import Entidades.PlayerEntity;
 			//actualiza el mundo, delta es tiempo y los otros parámetros vienen indicados en la documentación
 			world.step(delta, 6, 2);
 
+			if (Gdx.input.isTouched()) {
+				int toque = Gdx.input.getX();
+				System.out.println("just touched");
 
+
+			}
+
+			if (Gdx.input.justTouched() ) {
+				int toque = Gdx.input.getX();
+				System.out.println("is touched");
+				
+
+			}
 			// pinta la pantalla, último paso.
 			stage.draw();
 		}
@@ -214,6 +223,26 @@ import Entidades.PlayerEntity;
 		 * a implementar.
 		 */
 		private class GameContactListener implements ContactListener {
+
+			/**
+			 *método para controlar las colisiones
+			 * @param contact la colisión
+			 * @param userA el primer objeto
+			 * @param userB el segundo objeto
+			 */
+			private boolean hayContacto(Contact contact, Object userA, Object userB) {
+				Object userDataA = contact.getFixtureA().getUserData();
+				Object userDataB = contact.getFixtureB().getUserData();
+
+				//comprobamos que no sea nulo
+				if (userDataA == null || userDataB == null) {
+					return false;
+				}
+
+				//no se sabe que valor asigna a cada objeto que hace el contacto, por lo que hay que comprobar ambos casos
+				return (userDataA.equals(userA) && userDataB.equals(userB)) ||
+						       (userDataA.equals(userB) && userDataB.equals(userA));
+			}
 
 
 			@Override

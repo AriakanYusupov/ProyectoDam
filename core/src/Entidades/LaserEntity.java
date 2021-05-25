@@ -44,7 +44,7 @@ public class LaserEntity extends Actor {
 		//forma
 		PolygonShape box = new PolygonShape();
 		//tamaño caja en metros
-		box.setAsBox(0.1f, 2.0f);
+		box.setAsBox(0.05f, 0.1f);
 		//crea la fixture
 		fixture = body.createFixture(box, 3);
 		//nombre de la fixture para ser usada en maingame
@@ -64,8 +64,9 @@ public class LaserEntity extends Actor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// hay que pintar el cuerpo de la nave según se mueva usando las constantes
-		//setPosition(x, y);
-		//batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+		setPosition((body.getPosition().x - 0.05f) * Constantes.PIXEL_A_METRO,
+				(body.getPosition().y - 0.1f) * Constantes.PIXEL_A_METRO);
+		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**

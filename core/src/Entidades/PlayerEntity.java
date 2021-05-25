@@ -50,7 +50,7 @@ public class PlayerEntity extends Actor{
 		//forma
 		PolygonShape box = new PolygonShape();
 		//tamaño caja en metros
-		box.setAsBox(5.0f, 5.0f);
+		box.setAsBox(0.5f, 0.5f);
 		//crea la fixture
 		fixture = body.createFixture(box, 3);
 		//nombre de la fixture para ser usada en maingame
@@ -70,19 +70,22 @@ public class PlayerEntity extends Actor{
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// hay que pintar el cuerpo de la nave según se mueva usando las constantes
-		setPosition((body.getPosition().x - 5.0f) * Constantes.PIXEL_A_METRO,
-				(body.getPosition().y - 5.0f) * Constantes.PIXEL_A_METRO);
+		setPosition((body.getPosition().x - 0.5f) * Constantes.PIXEL_A_METRO,
+				(body.getPosition().y - 0.5f) * Constantes.PIXEL_A_METRO);
 		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**
-	 * metodo para que actualice es escenario
+	 * método para que actualice es escenario
 	 * @param delta en segundos
 	 */
 	@Override
 	public void act(float delta) {
 	}
 
+	/**
+	 * método para limpiar memoria
+	 */
 	public void detach() {
 		body.destroyFixture(fixture);
 		world.destroyBody(body);
