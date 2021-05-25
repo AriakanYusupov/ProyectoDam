@@ -1,5 +1,6 @@
 package Entidades;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -64,8 +65,8 @@ public class PlayerEntity extends Actor{
 
 	/**
 	 * método para pintar
-	 * @param batch
-	 * @param parentAlpha
+	 * @param batch Batch con las cosas a dibujar
+	 * @param parentAlpha alfa padre
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
@@ -81,6 +82,11 @@ public class PlayerEntity extends Actor{
 	 */
 	@Override
 	public void act(float delta) {
+
+		if (Gdx.input.isTouched()) {
+			movePlayer(Gdx.input.getX());
+		} else stopPlayer();
+
 	}
 
 	/**
@@ -89,6 +95,21 @@ public class PlayerEntity extends Actor{
 	public void detach() {
 		body.destroyFixture(fixture);
 		world.destroyBody(body);
+	}
+
+	private void movePlayer(int x){
+		System.out.println("player entity: posicion toque " + x +" posicion player: " +body.getPosition().x);
+		Vector2 posicion = body.getPosition();
+		if (x < body.getPosition().x*Constantes.PIXEL_A_METRO){
+
+			body.setLinearVelocity(-6,0);
+		} else if (x > body.getPosition().x*Constantes.PIXEL_A_METRO) {
+
+			body.setLinearVelocity(6,0);
+		}
+	}
+	private void stopPlayer() {
+		body.setLinearVelocity(0,0);
 	}
 
 	public boolean isAlive() {

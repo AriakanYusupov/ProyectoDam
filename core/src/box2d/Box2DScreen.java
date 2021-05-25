@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.spacegame.BaseScreen;
+import com.spacegame.Constantes;
 import com.spacegame.MainGame;
 
 /**
@@ -85,30 +86,11 @@ public class Box2DScreen extends BaseScreen {
 
 		// Movimiento del jugador, la nave se mueve hacia donde se ha tocado
 
-		if (Gdx.input.isTouched()) {
-			int toque = Gdx.input.getX();
-			System.out.println("just touched");
-			if (toque > playerBody.getPosition().x){
-				playerBody.setLinearVelocity(-8,0);
-			} else if (toque < playerBody.getPosition().x){
-				playerBody.setLinearVelocity(8,0);
-			}
-
+		if (Gdx.input.isTouched()){
+			movePlayer(Gdx.input.getX());
+		} else {
+			stopPlayer();
 		}
-
-		if (Gdx.input.justTouched() ) {
-			int toque = Gdx.input.getX();
-			System.out.println("is touched");
-			if (toque > playerBody.getPosition().x){
-				playerBody.setLinearVelocity(-8,0);
-			} else if (toque < playerBody.getPosition().x){
-				playerBody.setLinearVelocity(8,0);
-			}
-
-		}
-
-
-
 
 
 		world.step(delta, 6, 2);
@@ -123,6 +105,20 @@ public class Box2DScreen extends BaseScreen {
 
 	}
 
+	private void movePlayer(int x) {
+		System.out.println("box2d");
+		Vector2 posicion = playerBody.getPosition();
+		if (x< playerBody.getPosition().x*Constantes.PIXEL_A_METRO) {
+
+			playerBody.setLinearVelocity(-6,0);
+		} else if (x> playerBody.getPosition().x* Constantes.PIXEL_A_METRO) {
+
+			playerBody.setLinearVelocity(6,0);
+		}
+	}
+	private void stopPlayer() {
+		playerBody.setLinearVelocity(0,0);
+	}
 	/**
 	 * clase interna para majerar colisiones
 	 */
@@ -130,7 +126,7 @@ public class Box2DScreen extends BaseScreen {
 
 		/**
 		 * método para controlar colisiones
-		 * @param contact
+		 * @param contact Contacto
 		 */
 		@Override
 		public void beginContact(Contact contact) {

@@ -152,6 +152,7 @@ import Entidades.PlayerEntity;
 			backgroundMusic.setVolume(0.5f);
 			backgroundMusic.play();
 			System.out.println("pantalla de juego");
+			System.out.println("jugador x " + player.getX() + "jugador y "+ player.getY());
 
 		}
 
@@ -189,19 +190,6 @@ import Entidades.PlayerEntity;
 			//actualiza el mundo, delta es tiempo y los otros parámetros vienen indicados en la documentación
 			world.step(delta, 6, 2);
 
-			if (Gdx.input.isTouched()) {
-				int toque = Gdx.input.getX();
-				System.out.println("just touched");
-
-
-			}
-
-			if (Gdx.input.justTouched() ) {
-				int toque = Gdx.input.getX();
-				System.out.println("is touched");
-				
-
-			}
 			// pinta la pantalla, último paso.
 			stage.draw();
 		}
