@@ -30,6 +30,7 @@ public class BodyDefFactory {
 	public static BodyDef createAlien(float x, float y) {
 		BodyDef def = new BodyDef();
 		def.position.set(x, y);
+		def.type = BodyDef.BodyType.DynamicBody;
 		return def;
 	}
 
@@ -42,6 +43,7 @@ public class BodyDefFactory {
 	public static BodyDef createLaser(float x, float y) {
 		BodyDef def = new BodyDef();
 		def.position.set(x, y);
+		def.type = BodyDef.BodyType.DynamicBody;
 		return def;
 	}
 }

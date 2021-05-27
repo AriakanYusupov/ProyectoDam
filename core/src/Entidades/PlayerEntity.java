@@ -1,5 +1,6 @@
 package Entidades;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -50,7 +51,7 @@ public class PlayerEntity extends Actor{
 		//forma
 		PolygonShape box = new PolygonShape();
 		//tamaño caja en metros
-		box.setAsBox(5.0f, 5.0f);
+		box.setAsBox(0.5f, 0.5f);
 		//crea la fixture
 		fixture = body.createFixture(box, 3);
 		//nombre de la fixture para ser usada en maingame
@@ -64,28 +65,51 @@ public class PlayerEntity extends Actor{
 
 	/**
 	 * método para pintar
-	 * @param batch
-	 * @param parentAlpha
+	 * @param batch Batch con las cosas a dibujar
+	 * @param parentAlpha alfa padre
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// hay que pintar el cuerpo de la nave según se mueva usando las constantes
-		setPosition((body.getPosition().x - 5.0f) * Constantes.PIXEL_A_METRO,
-				(body.getPosition().y - 5.0f) * Constantes.PIXEL_A_METRO);
+		setPosition((body.getPosition().x - 0.5f) * Constantes.PIXEL_A_METRO,
+				(body.getPosition().y - 0.5f) * Constantes.PIXEL_A_METRO);
 		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**
-	 * metodo para que actualice es escenario
+	 * método para que actualice es escenario
 	 * @param delta en segundos
 	 */
 	@Override
 	public void act(float delta) {
+
+		if (Gdx.input.isTouched()) {
+			movePlayer(Gdx.input.getX());
+		} else stopPlayer();
+
 	}
 
+	/**
+	 * método para limpiar memoria
+	 */
 	public void detach() {
 		body.destroyFixture(fixture);
 		world.destroyBody(body);
+	}
+
+	private void movePlayer(int x){
+		System.out.println("player entity: posicion toque " + x +" posicion player: " +body.getPosition().x);
+		Vector2 posicion = body.getPosition();
+		if (x < body.getPosition().x*Constantes.PIXEL_A_METRO){
+
+			body.setLinearVelocity(-6,0);
+		} else if (x > body.getPosition().x*Constantes.PIXEL_A_METRO) {
+
+			body.setLinearVelocity(6,0);
+		}
+	}
+	private void stopPlayer() {
+		body.setLinearVelocity(0,0);
 	}
 
 	public boolean isAlive() {

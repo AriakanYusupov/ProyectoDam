@@ -50,7 +50,7 @@ public class AlienEntity extends Actor{
 		//forma
 		PolygonShape box = new PolygonShape();
 		//tamaño caja en metros
-		box.setAsBox(5.0f, 5.0f);
+		box.setAsBox(0.5f, 0.25f);
 		//crea la fixture
 		fixture = body.createFixture(box, 3);
 		//nombre de la fixture para ser usada en maingame
@@ -70,8 +70,9 @@ public class AlienEntity extends Actor{
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// hay que pintar el cuerpo de la nave según se mueva usando las constantes
-		//setPosition(x, y);
-		//batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+		setPosition((body.getPosition().x - 0.5f) * Constantes.PIXEL_A_METRO,
+				(body.getPosition().y - 0.25f) * Constantes.PIXEL_A_METRO);
+		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**
