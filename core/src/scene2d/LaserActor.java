@@ -16,7 +16,7 @@ public class LaserActor extends Actor {
 
 	/**
 	 * constructor
-	 * @param laser
+	 * @param laser textura
 	 */
 	public LaserActor(Texture laser) {
 		this.laser = laser;

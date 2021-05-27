@@ -27,6 +27,7 @@ public class Scene2DScreen extends BaseScreen {
 
 	//laser
 	private LaserActor laser;
+	private LaserAlienActor laserAlien;
 
 	//texturas usadas en los elementos
 	private Texture playerTexture, alienTexture, laserTexture;
@@ -56,12 +57,14 @@ public class Scene2DScreen extends BaseScreen {
 		player = new PlayerActor(playerTexture);
 		alien = new AlienActor(alienRegion);
 		laser = new LaserActor(laserTexture);
+		laserAlien = new LaserAlienActor(laserTexture);
 		player.setPosition(Constantes.ANCHO_PANTALLA/2, 100);
 
 		// se añaden al stage para que se vean
 		stage.addActor(player);
 		stage.addActor(alien);
 		stage.addActor(laser);
+		stage.addActor(laserAlien);
 	}
 
 	/**

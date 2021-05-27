@@ -35,7 +35,7 @@ public class FixtureFactory {
 		return fixture;
 	}
 
-	public static Fixture createLaserFixture(Body laserBody) {
+	public static Fixture createLaserPlayerFixture(Body laserBody) {
 		PolygonShape laserShape = new PolygonShape();
 		laserShape.setAsBox(0.05f, 0.1f);
 		Fixture fixture = laserBody.createFixture(laserShape, 3);
@@ -47,5 +47,19 @@ public class FixtureFactory {
 		laserShape.dispose();
 		return fixture;
 	}
+
+	public static Fixture createLaserAlienFixture(Body laserBody) {
+		PolygonShape laserShape = new PolygonShape();
+		laserShape.setAsBox(0.05f, 0.1f);
+		Fixture fixture = laserBody.createFixture(laserShape, 3);
+		Filter filter = new Filter();
+		filter.categoryBits = ConstantesFisicas.CAT_LASER_ALIEN;
+		filter.maskBits= ConstantesFisicas.MASK_LASER_ALIEN;
+		fixture.setFilterData(filter);
+
+		laserShape.dispose();
+		return fixture;
+	}
+
 }
 

@@ -33,10 +33,22 @@ public class BodyDefFactory {
 	}
 
 	/**
-	 * método para los laser
+	 * método para los laser del jugador
 	 * @return def
 	 */
-	public static BodyDef createLaser() {
+	public static BodyDef createLaserPlayer() {
+		BodyDef def = new BodyDef();
+		//def.position.set(x, y);
+		def.position.set(0,0);
+		def.type = BodyDef.BodyType.DynamicBody;
+		return def;
+	}
+
+	/**
+	 * método para los laser de los aliens
+	 * @return def
+	 */
+	public static BodyDef createLaserAlien() {
 		BodyDef def = new BodyDef();
 		//def.position.set(x, y);
 		def.position.set(0,0);

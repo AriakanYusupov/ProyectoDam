@@ -24,8 +24,8 @@ public class Box2DScreen extends BaseScreen {
 	private World world;
 	private Box2DDebugRenderer renderer;
 	private OrthographicCamera camera;
-	private Body playerBody, alienBody, laserBody;
-	private Fixture playerFixture, alienFixture, laserFixture;
+	private Body playerBody, alienBody, laserPlayerBody, laserAlienBody;
+	private Fixture playerFixture, alienFixture, laserPlayerFixture, laserAlienFixture;
 
 	private boolean isAlive= true;
 
@@ -49,17 +49,21 @@ public class Box2DScreen extends BaseScreen {
 		//creamos los body
 		playerBody = world.createBody(BodyDefFactory.createPlayer());
 		alienBody = world.createBody(BodyDefFactory.createAlien());
-		laserBody = world.createBody(BodyDefFactory.createLaser());
+		laserPlayerBody = world.createBody(BodyDefFactory.createLaserPlayer());
+		laserAlienBody = world.createBody(BodyDefFactory.createLaserAlien());
+
 
 		//creamos las fixtures
 		playerFixture = FixtureFactory.createPlayerFixture(playerBody);
 		alienFixture = FixtureFactory.createAlienFixture(alienBody);
-		laserFixture = FixtureFactory.createLaserFixture(laserBody);
+		laserPlayerFixture = FixtureFactory.createLaserPlayerFixture(laserPlayerBody);
+		laserAlienFixture = FixtureFactory.createLaserAlienFixture(laserAlienBody);
 
 		// le damos nombre para poder manejar colisciones.
 		playerFixture.setUserData("player");
 		alienFixture.setUserData("alien");
-		laserFixture.setUserData("laser");
+		laserPlayerFixture.setUserData("laserPlayer");
+		laserAlienFixture.setUserData("laserAlien");
 
 		// indicamos el contact Listener para controlar colisiones
 		world.setContactListener(new Box2DScreenContactListener());
@@ -70,11 +74,13 @@ public class Box2DScreen extends BaseScreen {
 	public void dispose() {
 		playerBody.destroyFixture(playerFixture);
 		alienBody.destroyFixture(alienFixture);
-		laserBody.destroyFixture(laserFixture);
+		laserPlayerBody.destroyFixture(laserPlayerFixture);
+		laserAlienBody.destroyFixture(laserAlienFixture);
 
 		world.destroyBody(playerBody);
 		world.destroyBody(alienBody);
-		world.destroyBody(laserBody);
+		world.destroyBody(laserPlayerBody);
+		world.destroyBody(laserAlienBody);
 
 		world.dispose();
 		renderer.dispose();
@@ -91,7 +97,7 @@ public class Box2DScreen extends BaseScreen {
 		} else {
 			stopPlayer();
 		}
-		laserBody.setLinearVelocity(0,10);
+		laserPlayerBody.setLinearVelocity(0,10);
 
 		world.step(delta, 6, 2);
 		camera.update();
