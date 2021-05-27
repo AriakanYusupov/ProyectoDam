@@ -48,8 +48,8 @@ public class Box2DScreen extends BaseScreen {
 
 		//creamos los body
 		playerBody = world.createBody(BodyDefFactory.createPlayer());
-		alienBody = world.createBody(BodyDefFactory.createAlien(0,0));
-		laserBody = world.createBody(BodyDefFactory.createLaser(0,0));
+		alienBody = world.createBody(BodyDefFactory.createAlien());
+		laserBody = world.createBody(BodyDefFactory.createLaser());
 
 		//creamos las fixtures
 		playerFixture = FixtureFactory.createPlayerFixture(playerBody);
@@ -91,7 +91,7 @@ public class Box2DScreen extends BaseScreen {
 		} else {
 			stopPlayer();
 		}
-
+		laserBody.setLinearVelocity(0,10);
 
 		world.step(delta, 6, 2);
 		camera.update();
@@ -105,6 +105,10 @@ public class Box2DScreen extends BaseScreen {
 
 	}
 
+	/**
+	 * método para mover la nave del jugador según donde este el ratón/pulsada la pantalla
+	 * @param x coordanada X del puntero
+	 */
 	private void movePlayer(int x) {
 		System.out.println("box2d");
 		Vector2 posicion = playerBody.getPosition();
@@ -119,6 +123,7 @@ public class Box2DScreen extends BaseScreen {
 	private void stopPlayer() {
 		playerBody.setLinearVelocity(0,0);
 	}
+
 	/**
 	 * clase interna para majerar colisiones
 	 */

@@ -23,26 +23,23 @@ public class BodyDefFactory {
 
 	/**
 	 * método para los aliens
-	 * @param x posición en X
-	 * @param y posicion en Y
 	 * @return def
 	 */
-	public static BodyDef createAlien(float x, float y) {
+	public static BodyDef createAlien() {
 		BodyDef def = new BodyDef();
-		def.position.set(x, y);
+		def.position.set(0, 0);
 		def.type = BodyDef.BodyType.DynamicBody;
 		return def;
 	}
 
 	/**
 	 * método para los laser
-	 * @param x posición en X
-	 * @param y posicion en Y
 	 * @return def
 	 */
-	public static BodyDef createLaser(float x, float y) {
+	public static BodyDef createLaser() {
 		BodyDef def = new BodyDef();
-		def.position.set(x, y);
+		//def.position.set(x, y);
+		def.position.set(0,0);
 		def.type = BodyDef.BodyType.DynamicBody;
 		return def;
 	}
