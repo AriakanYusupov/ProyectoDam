@@ -119,4 +119,9 @@ public class PlayerEntity extends Actor{
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
+
+	public Vector2 getPlayerPosition(){
+		return new Vector2(body.getPosition().x, body.getPosition().y);
+	}
+
 }

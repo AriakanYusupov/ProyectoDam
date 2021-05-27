@@ -58,7 +58,7 @@ public class Scene2DScreen extends BaseScreen {
 		laser = new LaserActor(laserTexture);
 		player.setPosition(Constantes.ANCHO_PANTALLA/2, 100);
 
-		// Add the actors to the screen. They won't be visible if you don't add them.
+		// se añaden al stage para que se vean
 		stage.addActor(player);
 		stage.addActor(alien);
 		stage.addActor(laser);

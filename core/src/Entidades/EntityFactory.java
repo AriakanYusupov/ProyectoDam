@@ -45,13 +45,12 @@ public class EntityFactory {
 	/**
 	 * Crea la entidad alien
 	 * @param world     mundo
-	 * @param x  posición X inicial (metros)
-	 * @param y  posición Y inicial (metros)
+	 * @param posicion vector con la posición de inicio del laser (en metros)
 	 * @return laser.
 	 */
-	public LaserEntity createLaser(World world, float x, float y) {
+	public LaserEntity createLaser(World world, Vector2 posicion) {
 		Texture laserTexture = manager.get("laser.png");
-		return new LaserEntity(world, laserTexture, x, y);
+		return new LaserEntity(world, laserTexture, posicion);
 	}
 
 

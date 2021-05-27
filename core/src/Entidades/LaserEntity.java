@@ -2,6 +2,7 @@ package Entidades;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -26,7 +27,7 @@ public class LaserEntity extends Actor {
 	//boolean para saber si el laser está vivo
 	private boolean alive = true;
 
-	public LaserEntity(World world, Texture texture, float x, float y) {
+	public LaserEntity(World world, Texture texture, Vector2 posicion) {
 		this.world = world;
 		this.texture = texture;
 
@@ -34,7 +35,7 @@ public class LaserEntity extends Actor {
 		//defición del body
 		BodyDef def = new BodyDef();
 		//posición inicial
-		def.position.set(x, y);
+		def.position.set(posicion.x, posicion.y);
 		//tipo de body
 		def.type = BodyDef.BodyType.DynamicBody;
 		//creamos el body
@@ -53,7 +54,9 @@ public class LaserEntity extends Actor {
 		box.dispose();
 
 		//se pone en un tamaño para que se vea, hay que usar la clase Constantes
-		setSize(Constantes.PIXEL_A_METRO, Constantes.PIXEL_A_METRO );
+		setSize(Constantes.PIXEL_A_METRO/3, Constantes.PIXEL_A_METRO/3 );
+		//body.setLinearVelocity(0,8);
+
 	}
 
 	/**

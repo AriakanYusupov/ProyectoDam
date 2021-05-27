@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -42,6 +42,10 @@ public class LogInScreen extends BaseScreen {
 		// cargamos el fichero con la skin
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
+		//tabla para recoger los botones
+		Table tabla = new Table();
+		tabla.setFillParent(true);
+
 		//creamos el boton. el primer parametro es el texto a mostrar, el segundo la skin a usar
 		entrar = new TextButton("Entrar", skin);
 		registrar = new TextButton("Registrar nuevo usuario", skin);
@@ -50,10 +54,19 @@ public class LogInScreen extends BaseScreen {
 		usuario= new TextField("Usuario", skin);
 		usuario.setMaxLength(15);
 
-
 		password = new TextField("Password", skin);
-		password.setPasswordMode(true);
+		password.isPasswordMode();
 		password.setMaxLength(12);
+
+		//se añaden los elementos a la tabla
+		tabla.add(usuario).size(300,80).pad(10);
+		tabla.row();
+		tabla.add(password).size(300,80).pad(10);
+		tabla.row();
+		tabla.add(entrar).size(300,80).pad(10);
+		tabla.row();
+		tabla.add(registrar).size(300,80).pad(10);
+		tabla.row();
 
 		// se añaden los capturadores de eventos.
 		//botón entrar
@@ -75,22 +88,8 @@ public class LogInScreen extends BaseScreen {
 		});
 
 
-		// tamaño y posicion de los botones
-		// el origen de coordenadas 0, 0 es la esquina inferior izquierda
-		entrar.setSize(100, 40);
-		entrar.setPosition(Constantes.ANCHO_PANTALLA/2-50,Constantes.ALTO_PANTALLA/2-150);
-		usuario.setSize(300, 40);
-		usuario.setPosition(Constantes.ANCHO_PANTALLA/2-150,Constantes.ALTO_PANTALLA/2+80);
-		password.setSize(300, 40);
-		password.setPosition(Constantes.ANCHO_PANTALLA/2-150,Constantes.ALTO_PANTALLA/2);
-		registrar.setSize(100,40);
-		registrar.setPosition(Constantes.ANCHO_PANTALLA/2-50,Constantes.ALTO_PANTALLA/2-250);
-
-		// se añaden los actores al stage para que se vean
-		stage.addActor(entrar);
-		stage.addActor(usuario);
-		stage.addActor(password);
-		stage.addActor(registrar);
+	// se añaden los actores al stage para que se vean
+			stage.addActor(tabla);
 	}
 
 	/**

@@ -137,8 +137,13 @@ import Entidades.PlayerEntity;
 			//añadimos aliens y jugador
 			/*for (AlienEntity alien : listaAliens)
 				stage.addActor(alien);*/
+			//Vector2 posicionLaser = new Vector2 (player.getX(), player.getY()+200);
+
+			laser = factory.createLaser(world, player.getPlayerPosition());
+
 			stage.addActor(alien);
 			stage.addActor(player);
+			stage.addActor(laser);
 
 			stage.addActor(tablaPuntos);
 			stage.addActor(tablaVidas);
@@ -152,7 +157,7 @@ import Entidades.PlayerEntity;
 			backgroundMusic.setVolume(0.5f);
 			backgroundMusic.play();
 			System.out.println("pantalla de juego");
-			System.out.println("jugador x " + player.getX() + "jugador y "+ player.getY());
+			System.out.println(player.getPlayerPosition());
 
 		}
 
@@ -184,6 +189,10 @@ import Entidades.PlayerEntity;
 			Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+			if (Gdx.input.isButtonJustPressed(0)){
+				System.out.println("shoot");
+				playerShooting();
+			}
 			// actualiza el escenario a lo que necesitamos
 			stage.act();
 
@@ -206,6 +215,10 @@ import Entidades.PlayerEntity;
 			world.dispose();
 		}
 
+		private void playerShooting (){
+			EntityFactory factory = new EntityFactory(game.getManager());
+			LaserEntity shot = factory.createLaser(world, new Vector2(player.getX(), player.getY()));
+			}
 		/**
 		 * Clase que controla las colisiones.
 		 * a implementar.
