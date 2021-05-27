@@ -7,7 +7,7 @@ package com.spacegame;
 public class Constantes {
 
 	//conversión entre  pixeles y metros
-	public static final float PIXEL_A_METRO = 90f;
+	public static final float PIXEL_A_METRO = 900f;
 
 	//velocidad de movimiento del jugador
 	public static final float VELOCIDAD_DEFENSOR = 8f;
