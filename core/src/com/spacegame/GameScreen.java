@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -69,13 +70,16 @@ import Entidades.PlayerEntity;
 		private final Sound expLarga;
 		private final Sound laserAlien;
 		private final Sound laserDefensor;
-		private final Sound Lose;
+		private final Sound lose;
 
 		//tablas para insertar puntos y vidas
 		private Table tablaPuntos = new Table();
 		private Table tablaVidas = new Table();
 		//labels
 		private Label labelPuntos, labelVidas, puntos, vidas;
+		//puntos y vidas
+		private Integer points, lifes;
+
 
 		EntityFactory factory = new EntityFactory(game.getManager());
 
@@ -101,13 +105,14 @@ import Entidades.PlayerEntity;
 			expLarga = game.getManager().get("sound/Explosion_Larga.ogg");
 			laserAlien = game.getManager().get("sound/Laser_Alien.ogg");
 			laserDefensor = game.getManager().get("sound/Laser_Defensor.ogg");
-			Lose = game.getManager().get("sound/Lose.ogg");
+			lose = game.getManager().get("sound/Lose.ogg");
 			backgroundMusic = game.getManager().get("music/Punky.mp3");
 
 			//labels
-			labelPuntos = new Label("Puntos:", skin);
+			points= 0;
+			labelPuntos = new Label("Puntos", skin);
 			labelVidas = new Label ("Vidas:", skin);
-			puntos = new Label("5000", skin);
+			puntos = new Label(points.toString(), skin);
 			vidas = new Label("3", skin);
 
 			tablaPuntos.add(labelPuntos).left();
@@ -142,6 +147,7 @@ import Entidades.PlayerEntity;
 			for (int i= 0; i< MathUtils.random(3,6); i++){
 				listaAliens.add(factory.createAlien(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
 					(Constantes.ALTO_PANTALLA*MathUtils.random(0.9f,1.5f)/(Constantes.PIXEL_A_METRO*2))));
+				listaAliens.get(i).setName(i);
 				// se añaden los aliens a la escena
 				stage.addActor(listaAliens.get(i));
 			}
@@ -201,6 +207,9 @@ import Entidades.PlayerEntity;
 			Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+			/**
+			 * aquí hacemos que cuando el jugador pulsa el botón la nave dispare
+			 */
 			if (Gdx.input.isButtonJustPressed(1)){
 				//solo se pueden tener 3 lasers en la pantalla
 				if (listaLaser.size() < 3) {
@@ -220,7 +229,30 @@ import Entidades.PlayerEntity;
 						i--;
 					}
 				}
-				System.out.println(player.getPlayerPosition());
+			}
+			/**
+			 * actualizamos los puntos
+			 */
+			if (player.isAlive()){
+				puntos.setText(points.toString());
+			}
+			//el jugador muere, se va a GAME OVER
+			if (!player.isAlive()){
+				backgroundMusic.stop();
+				//paramos los aliens
+				stopAliens();
+
+				stage.addAction(Actions.sequence(
+						//esperamos un segundo para cambiar de pantalla
+						Actions.delay(1.5f),
+						Actions.run(new Runnable() {
+							@Override
+							public void run() {
+								//cambiamos de pantalla
+								game.setScreen(game.gameOverScreen);
+							}
+						})
+				));
 			}
 
 
@@ -246,9 +278,15 @@ import Entidades.PlayerEntity;
 			world.dispose();
 		}
 
-
-
 	/**
+	 * método para parar todos los aliens
+	 */
+	private void stopAliens(){
+			for (int i= 0; i < listaAliens.size();i++)
+			listaAliens.get(i).setStop(true);
+		}
+
+		/**
 		 * Clase que controla las colisiones.
 		 * a implementar.
 		 */
@@ -274,47 +312,33 @@ import Entidades.PlayerEntity;
 						       (userDataA.equals(userB) && userDataB.equals(userA));
 
 			}
-		/*	private boolean hayContacto(Contact contact, AlienEntity alien, LaserEntity laser){
-				return hayContacto(contact, laser, alien);
-			}
-			private boolean hayContacto(Contact contact, LaserEntity laser, AlienEntity alien){
-				Object userDataA = contact.getFixtureA().getUserData();
-				Object userDataB = contact.getFixtureB().getUserData();
-
-				if (userDataA == null || userDataB == null) {
-					return false;
-				}
-
-				//no se sabe que valor asigna a cada objeto que hace el contacto, por lo que hay que comprobar ambos casos
-				return (userDataA.equals(laser.getName()) && userDataB.equals(alien.getName())) ||
-						       (userDataA.equals(alien.getName()) && userDataB.equals(laser.getName()));
-			}*/
-
 
 			@Override
 			public void beginContact(Contact contact) {
+				//colision de laser enviado por el jugador contra un alien
 				for (int i = 0; i < listaLaser.size(); i++){
 					listaLaser.get(i).setName(i);
 					for (int j = 0; j < listaAliens.size();j++){
-						listaAliens.get(j).setName(j);
 						if (hayContacto(contact, listaLaser.get(i).getName(), listaAliens.get(j).getName())){
-							System.out.println("laser "+ i);
-							System.out.println("alien "+ j);
-							System.out.println("set alien dead " +j);
-							System.out.println("set laser dead "+ i);
+							//muere el laser
 							listaLaser.get(i).setAlive(false);
+							//muere el alien y se quita de la lista
 							listaAliens.get(j).setAlive(false);
-							listaAliens.remove(j);
-							System.out.println(listaAliens.size());
+							//listaAliens.remove(j);
+							//efecto de sonido
 							expCorta.play();
+							points+= 100;
 							break;
 						}
-
-
 					}
-
 				}
-
+				//colisión de la nave del jugador con un alien
+				for (int i = 0; i < listaAliens.size();i++){
+					if(hayContacto(contact, "player", listaAliens.get(i).getName())) {
+						player.setAlive(false);
+						expLarga.play();
+					}
+				}
 
 
 

@@ -30,18 +30,17 @@ public class AlienEntity extends Actor{
 	//fixture de alien
 	private Fixture fixture;
 
-	//boolean para saber si el alien está vivo
-	private boolean alive;
+	//booleanos
+	private boolean alive, stop, direccion = false;
 
+	//nombre del alien para poder revisar las colisiones
 	private String name = "alien";
-
-	private boolean direccion = false;
-
 
 	public AlienEntity(World world, Texture texture, float x, float y) {
 		this.world = world;
 		this.texture = texture;
 		alive= true;
+		stop= false;
 
 		//Creación del cuerpo del alien
 		//definición del body
@@ -92,13 +91,20 @@ public class AlienEntity extends Actor{
 	 */
 	@Override
 	public void act(float delta) {
+		//si el alien esta vivo, este se mueve de un lado a otro
 		if (alive){
 			moveAlien();
+			//si se sale de la pantalla por abajo, vuelve a aparecer arriba
 			if (body.getPosition().y*Constantes.PIXEL_A_METRO < -54) {
 				transportAlien();
 			}
 		}
+		//para para al alien
+		if (stop){
+			body.setLinearVelocity(0,0);
+		}
 
+		//el alien muere
 		if (!isAlive()){
 			remove();
 			body.destroyFixture(fixture);
@@ -111,29 +117,37 @@ public class AlienEntity extends Actor{
 		world.destroyBody(body);
 	}
 
+	/**
+	 * método que mueve los aliens
+	 */
 	private void moveAlien() {
-
+		//la dirección en que se mueven al principio se elige al azar
+		//se mueve a la derecha
 		if (direccion == true) {
 			body.setLinearVelocity(4, -1);
+			//llega al límite de la pantalla cambia de sentido
 			if (body.getPosition().x * Constantes.PIXEL_A_METRO >= 960) {
 				direccion = !direccion;
 			}
+		//se mueve a la izquierda
 		} else {
 			body.setLinearVelocity(-4, -1);
+			//llega al límite y cambia de sentido
 			if (body.getPosition().x * Constantes.PIXEL_A_METRO <= 0) {
 				direccion = !direccion;
 			}
 		}
 	}
 
+	/**
+	 * método para trasladar a los aliens que se van por abajo a la parte superior de la pantalla
+	 */
 	private void transportAlien(){
 			Vector2 vector = new Vector2(body.getPosition().x,10);
 			body.setTransform(vector, body.getAngle());
 			body.setAwake(true);
 
 	}
-
-
 
 	public boolean isAlive() {
 		return alive;
@@ -147,9 +161,22 @@ public class AlienEntity extends Actor{
 	public String getName() {
 		return name;
 	}
+
+	/**
+	 * método para asigar el nombre según la posición en la lista
+	 * @param i Integer con el indice en la lista
+	 */
 	public void setName (Integer i){
 		name = name + i.toString();
 		fixture.setUserData(name);
+	}
+
+	public boolean isStop() {
+		return stop;
+	}
+
+	public void setStop(boolean stop) {
+		this.stop = stop;
 	}
 }
 

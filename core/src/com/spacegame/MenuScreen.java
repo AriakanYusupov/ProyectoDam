@@ -137,6 +137,7 @@ public class MenuScreen extends BaseScreen {
 	 */
 	@Override
 	public void render(float delta) {
+		//color en RGB de 0 a 1
 		Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();

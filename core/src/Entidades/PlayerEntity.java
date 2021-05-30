@@ -84,10 +84,11 @@ public class PlayerEntity extends Actor{
 	@Override
 	public void act(float delta) {
 
+		//controlamos la entrada para el movimiento de la nave
 		if (Gdx.input.isTouched()) {
 			movePlayer(Gdx.input.getX());
-
 		} else stopPlayer();
+
 	}
 
 	/**
@@ -98,27 +99,35 @@ public class PlayerEntity extends Actor{
 		world.destroyBody(body);
 	}
 
+	/**
+	 * método para mover la nave
+	 * @param x coodenada x de donde se pulsa
+	 */
 	private void movePlayer(int x) {
-
-			if (x < body.getPosition().x * Constantes.PIXEL_A_METRO) {
-				body.setLinearVelocity(-6, 0);
-				if (body.getPosition().x * Constantes.PIXEL_A_METRO < 54f){
-					stopPlayer();
-				}
-
-			} else if (x > body.getPosition().x * Constantes.PIXEL_A_METRO) {
-				body.setLinearVelocity(6, 0);
-				if (body.getPosition().x * Constantes.PIXEL_A_METRO > 906f){
-					stopPlayer();
-				}
+		//si se pulsa a la izquierda de la nave, esta se mueve a la izquierda
+		if (x < body.getPosition().x * Constantes.PIXEL_A_METRO) {
+			body.setLinearVelocity(-6, 0);
+			//límite a la izquierda para que no se pueda salir de la pantalla
+			if (body.getPosition().x * Constantes.PIXEL_A_METRO < 54f){
+				stopPlayer();
+			}
+		//si se pulsa a la derecha, se mueve a la derecha
+		} else if (x > body.getPosition().x * Constantes.PIXEL_A_METRO) {
+			body.setLinearVelocity(6, 0);
+			//límite por la derecha
+			if (body.getPosition().x * Constantes.PIXEL_A_METRO > 906f){
+				stopPlayer();
 			}
 		}
+	}
 
+	/**
+	 * método para detener el movimiento de la nave
+	 */
 	private void stopPlayer() {
 		body.setLinearVelocity(0,0);
 
 	}
-
 
 	public boolean isAlive() {
 		return alive;

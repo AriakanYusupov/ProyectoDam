@@ -37,6 +37,7 @@ public class MainGame extends Game {
 		//manager.load("alien2.png", Texture.class);
 		manager.load("laser.png",Texture.class);
 		manager.load("laseralien.png", Texture.class);
+		manager.load("gameover.png", Texture.class);
 
 		manager.load("sound/Cuenta_Atras.ogg", Sound.class);
 		manager.load("sound/Explosion_Corta.ogg", Sound.class);
@@ -65,7 +66,7 @@ public class MainGame extends Game {
 		scoreScreen= new ScoreScreen(this);
 		registroScreen = new RegistroScreen(this);
 
-		setScreen(logInScreen);
+		setScreen(gameScreen);
 	}
 
 	public AssetManager getManager() {
