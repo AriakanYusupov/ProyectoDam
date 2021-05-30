@@ -19,7 +19,8 @@ public class LaserAlienActor extends Actor{
     public LaserAlienActor(Texture laser) {
         this.laser = laser;
         this.alive = true;
-          }
+        setSize(laser.getWidth(), laser.getHeight());
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

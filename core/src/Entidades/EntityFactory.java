@@ -28,6 +28,7 @@ public class EntityFactory {
 	 */
 	public PlayerEntity createPlayer(World world, Vector2 position) {
 		Texture playerTexture = manager.get("defensor.png");
+
 		return new PlayerEntity(world, playerTexture, position);
 	}
 	/**
@@ -43,7 +44,7 @@ public class EntityFactory {
 	}
 
 	/**
-	 * Crea la entidad alien
+	 * Crea la entidad laser de jugador
 	 * @param world     mundo
 	 * @param posicion vector con la posición de inicio del laser (en metros)
 	 * @return laser.
@@ -53,5 +54,15 @@ public class EntityFactory {
 		return new LaserEntity(world, laserTexture, posicion);
 	}
 
+	/**
+	 * Crea la entidad laser de alien
+	 * @param world    mundo
+	 * @param posicion vector con la posición de inicio del laser (en metros)
+	 * @return laserAlien.
+	 */
+	public LaserAlienEntity createLaserAlien(World world, Vector2 posicion) {
+		Texture laserAlienTexture = manager.get("laseralien.png");
+		return new LaserAlienEntity(world, laserAlienTexture, posicion);
+	}
 
 }

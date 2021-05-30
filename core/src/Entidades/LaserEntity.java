@@ -25,11 +25,19 @@ public class LaserEntity extends Actor {
 	private Fixture fixture;
 
 	//boolean para saber si el laser está vivo
-	private boolean alive = true;
+	private boolean alive;
+
+	//contador para eliminar el laser por tiempo
+	private float timer;
+	//nombre
+	private String name = "laser";
+
 
 	public LaserEntity(World world, Texture texture, Vector2 posicion) {
 		this.world = world;
 		this.texture = texture;
+		timer = 0;
+		alive = true;
 
 		//Creación del cuerpo del laser
 		//defición del body
@@ -40,6 +48,7 @@ public class LaserEntity extends Actor {
 		def.type = BodyDef.BodyType.DynamicBody;
 		//creamos el body
 		body = world.createBody(def);
+		body.setLinearVelocity(0,6);
 
 		//Caja para las físicas
 		//forma
@@ -55,7 +64,6 @@ public class LaserEntity extends Actor {
 
 		//se pone en un tamaño para que se vea, hay que usar la clase Constantes
 		setSize(Constantes.PIXEL_A_METRO/3, Constantes.PIXEL_A_METRO/3 );
-		//body.setLinearVelocity(0,8);
 
 	}
 
@@ -78,6 +86,50 @@ public class LaserEntity extends Actor {
 	 */
 	@Override
 	public void act(float delta) {
+		if (!isAlive()){
+			remove();
+
+		}
+
+		vidaLaser(delta);
+
+
 	}
 
+	public void detach() {
+		body.destroyFixture(fixture);
+		world.destroyBody(body);
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
+	public float getTimer() {
+		return timer;
+	}
+
+	public void setTimer(float timer) {
+		this.timer = timer;
+	}
+
+	public void vidaLaser(float delta){
+		if (timer >= Constantes.VIDA_LASER) {
+			alive = false;
+		}
+		timer += delta;
+		}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+	public void setName (Integer i){
+		name = name + i.toString();
+		fixture.setUserData(name);
+	}
 }

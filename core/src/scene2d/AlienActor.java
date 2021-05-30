@@ -20,6 +20,7 @@ public class AlienActor extends Actor {
 	 */
 	public AlienActor(TextureRegion alien) {
 		this.alien = alien;
+		setSize(alien.getRegionWidth(), alien.getRegionHeight());
 		this.alive = true;
 	}
 
@@ -27,6 +28,8 @@ public class AlienActor extends Actor {
 	public void draw(Batch batch, float parentAlpha) {
 		batch.draw(alien, getX(), getY(), getWidth(), getHeight());
 	}
+
+
 
 	public boolean isAlive() {
 		return alive;

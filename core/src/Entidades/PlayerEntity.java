@@ -32,10 +32,11 @@ public class PlayerEntity extends Actor{
 	//boolean para saber si el jugador está vivo
 	private boolean alive = true;
 
-
 	public PlayerEntity(World world, Texture texture, Vector2 position) {
+
 		this.world = world;
 		this.texture = texture;
+
 
 		//Creación del cuerpo del jugador
 		//defición del body
@@ -85,8 +86,8 @@ public class PlayerEntity extends Actor{
 
 		if (Gdx.input.isTouched()) {
 			movePlayer(Gdx.input.getX());
-		} else stopPlayer();
 
+		} else stopPlayer();
 	}
 
 	/**
@@ -97,20 +98,27 @@ public class PlayerEntity extends Actor{
 		world.destroyBody(body);
 	}
 
-	private void movePlayer(int x){
-		System.out.println("player entity: posicion toque " + x +" posicion player: " +body.getPosition().x);
-		Vector2 posicion = body.getPosition();
-		if (x < body.getPosition().x*Constantes.PIXEL_A_METRO){
+	private void movePlayer(int x) {
 
-			body.setLinearVelocity(-6,0);
-		} else if (x > body.getPosition().x*Constantes.PIXEL_A_METRO) {
+			if (x < body.getPosition().x * Constantes.PIXEL_A_METRO) {
+				body.setLinearVelocity(-6, 0);
+				if (body.getPosition().x * Constantes.PIXEL_A_METRO < 54f){
+					stopPlayer();
+				}
 
-			body.setLinearVelocity(6,0);
+			} else if (x > body.getPosition().x * Constantes.PIXEL_A_METRO) {
+				body.setLinearVelocity(6, 0);
+				if (body.getPosition().x * Constantes.PIXEL_A_METRO > 906f){
+					stopPlayer();
+				}
+			}
 		}
-	}
+
 	private void stopPlayer() {
 		body.setLinearVelocity(0,0);
+
 	}
+
 
 	public boolean isAlive() {
 		return alive;

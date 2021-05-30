@@ -14,6 +14,8 @@ public class LaserActor extends Actor {
 	//boolean para saber si está vivo
 	private boolean alive;
 
+	private float timer;
+
 	/**
 	 * constructor
 	 * @param laser textura
@@ -21,6 +23,8 @@ public class LaserActor extends Actor {
 	public LaserActor(Texture laser) {
 		this.laser = laser;
 		this.alive = true;
+		setSize(laser.getWidth(), laser.getHeight());
+		timer = 0;
 	}
 
 	@Override
@@ -34,5 +38,13 @@ public class LaserActor extends Actor {
 
 	public void setAlive(boolean alive) {
 		this.alive = alive;
+	}
+
+	public float getTimer() {
+		return timer;
+	}
+
+	public void setTimer(float timer) {
+		this.timer = timer;
 	}
 }

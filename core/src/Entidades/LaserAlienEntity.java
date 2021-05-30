@@ -27,6 +27,8 @@ public class LaserAlienEntity extends Actor {
     //boolean para saber si el laser está vivo
     private boolean alive = true;
 
+    private String name = "laserAlien";
+
     public LaserAlienEntity(World world, Texture texture, Vector2 posicion) {
         this.world = world;
         this.texture = texture;
@@ -78,6 +80,20 @@ public class LaserAlienEntity extends Actor {
      */
     @Override
     public void act(float delta) {
+    }
+
+    public void detach() {
+        body.destroyFixture(fixture);
+        world.destroyBody(body);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+    public void setName (Integer i) {
+        name = name + i.toString();
+        fixture.setUserData(name);
     }
 
 }

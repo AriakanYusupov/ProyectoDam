@@ -41,7 +41,7 @@ public class Scene2DScreen extends BaseScreen {
 		// carga de texturas y regiones
 		playerTexture = new Texture("defensor.png");
 		alienTexture = new Texture("alien1.png");
-		alienRegion = new TextureRegion(alienRegion, 0, 64, 128, 64);
+		alienRegion = new TextureRegion(alienTexture, 0, 64, 128, 64);
 		laserTexture = new Texture("laser.png");
 	}
 
@@ -85,7 +85,7 @@ public class Scene2DScreen extends BaseScreen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		stage.act();
-		//checkCollisions();
+
 		stage.draw();
 	}
 
@@ -104,6 +104,7 @@ public class Scene2DScreen extends BaseScreen {
 		playerTexture.dispose();
 		laserTexture.dispose();
 		alienTexture.dispose();
+
 		stage.dispose();
 	}
 

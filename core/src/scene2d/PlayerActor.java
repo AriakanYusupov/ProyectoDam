@@ -24,6 +24,7 @@ public class PlayerActor extends Actor{
 	public PlayerActor(Texture player) {
 		this.player = player;
 		this.alive = true;
+		setSize(player.getWidth(), player.getHeight());
 	}
 
 	@Override

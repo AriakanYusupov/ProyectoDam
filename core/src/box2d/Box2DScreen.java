@@ -13,7 +13,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.spacegame.BaseScreen;
-import com.spacegame.Constantes;
 import com.spacegame.MainGame;
 
 /**
@@ -90,14 +89,6 @@ public class Box2DScreen extends BaseScreen {
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		// Movimiento del jugador, la nave se mueve hacia donde se ha tocado
-
-		if (Gdx.input.isTouched()){
-			movePlayer(Gdx.input.getX());
-		} else {
-			stopPlayer();
-		}
-		laserPlayerBody.setLinearVelocity(0,10);
 
 		world.step(delta, 6, 2);
 		camera.update();
@@ -111,65 +102,19 @@ public class Box2DScreen extends BaseScreen {
 
 	}
 
-	/**
-	 * método para mover la nave del jugador según donde este el ratón/pulsada la pantalla
-	 * @param x coordanada X del puntero
-	 */
-	private void movePlayer(int x) {
-		System.out.println("box2d");
-		Vector2 posicion = playerBody.getPosition();
-		if (x< playerBody.getPosition().x*Constantes.PIXEL_A_METRO) {
-
-			playerBody.setLinearVelocity(-6,0);
-		} else if (x> playerBody.getPosition().x* Constantes.PIXEL_A_METRO) {
-
-			playerBody.setLinearVelocity(6,0);
-		}
-	}
-	private void stopPlayer() {
-		playerBody.setLinearVelocity(0,0);
-	}
 
 	/**
 	 * clase interna para majerar colisiones
 	 */
 	private class Box2DScreenContactListener implements ContactListener {
 
-		/**
-		 * método para controlar colisiones
-		 * @param contact Contacto
-		 */
 		@Override
 		public void beginContact(Contact contact) {
 			// Get the fixtures.
-			Fixture fixtureA = contact.getFixtureA(), fixtureB = contact.getFixtureB();
 
-			//control para evitar nulos
-			if (fixtureA.getUserData() == null || fixtureB.getUserData() == null) {
-				return;
-			}
-
-			// no sabemos de antermano que fixtures asigna como A o B, por lo que hay que comprobarlo
-
-			if ((fixtureA.getUserData().equals("player") && fixtureB.getUserData().equals("alien")) ||
-					    (fixtureA.getUserData().equals("alien") && fixtureB.getUserData().equals("player"))) {
-
-				//el jugador choca con un alien, muerte
-				isAlive= false;
-			}
-
-			//jugador y laser
-			if ((fixtureA.getUserData().equals("player") && fixtureB.getUserData().equals("laser")) ||
-					    (fixtureA.getUserData().equals("laser") && fixtureB.getUserData().equals("player"))) {
-				isAlive = false;
-			}
-
-			//alien y laser
-			if ((fixtureA.getUserData().equals("alien") && fixtureB.getUserData().equals("laser")) ||
-					    (fixtureA.getUserData().equals("laser") && fixtureB.getUserData().equals("alien"))) {
-
-			}
 		}
+
+
 
 		@Override
 		public void endContact(Contact contact) {

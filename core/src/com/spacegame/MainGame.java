@@ -36,6 +36,7 @@ public class MainGame extends Game {
 		manager.load("alien1.png", Texture.class);
 		//manager.load("alien2.png", Texture.class);
 		manager.load("laser.png",Texture.class);
+		manager.load("laseralien.png", Texture.class);
 
 		manager.load("sound/Cuenta_Atras.ogg", Sound.class);
 		manager.load("sound/Explosion_Corta.ogg", Sound.class);
