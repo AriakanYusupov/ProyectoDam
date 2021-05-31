@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -62,6 +64,10 @@ import Entidades.PlayerEntity;
 		//posicion de la cámara
 		private Vector3 position;
 
+		//imagen del fondo
+		private SpriteBatch batch;
+		private Texture fondo;
+
 		// Musica de fondo
 		private final Music backgroundMusic;
 
@@ -70,7 +76,7 @@ import Entidades.PlayerEntity;
 		private final Sound expLarga;
 		private final Sound laserAlien;
 		private final Sound laserDefensor;
-		private final Sound lose;
+		//private final Sound lose;
 
 		//tablas para insertar puntos y vidas
 		private Table tablaPuntos = new Table();
@@ -80,7 +86,10 @@ import Entidades.PlayerEntity;
 		//puntos y vidas
 		private Integer points, lifes;
 
+		//booleano para cambiar de fase
+		private boolean nuevaFase;
 
+		//factory para poder crear los lasers
 		EntityFactory factory = new EntityFactory(game.getManager());
 
 		/**
@@ -105,7 +114,7 @@ import Entidades.PlayerEntity;
 			expLarga = game.getManager().get("sound/Explosion_Larga.ogg");
 			laserAlien = game.getManager().get("sound/Laser_Alien.ogg");
 			laserDefensor = game.getManager().get("sound/Laser_Defensor.ogg");
-			lose = game.getManager().get("sound/Lose.ogg");
+			//lose = game.getManager().get("sound/Lose.ogg");
 			backgroundMusic = game.getManager().get("music/Punky.mp3");
 
 			//labels
@@ -124,6 +133,11 @@ import Entidades.PlayerEntity;
 			tablaVidas.setPosition(Constantes.ANCHO_PANTALLA-100,Constantes.ALTO_PANTALLA-20);
 			tablaVidas.setSize(100,8);
 
+			nuevaFase = false;
+
+			//carga del fondo
+			batch = new SpriteBatch();
+			fondo = new Texture("fondo.png");
 
 		}
 
@@ -133,44 +147,41 @@ import Entidades.PlayerEntity;
 		 */
 		@Override
 		public void show() {
+
 			listaAliens = new ArrayList<>();
 			listaLaserAlien= new ArrayList<>();
 			listaLaser = new ArrayList<>();
 
 			stage.setDebugAll(true);
 
+
 			// Crea al jugador y lo pone en su posición inicial
 			//como la escena está en metros hay que calcular el valor central de la pantalla usando la constante de conversión
 			player = factory.createPlayer(world, new Vector2(Constantes.ANCHO_PANTALLA/(Constantes.PIXEL_A_METRO*2), 1f));
 
 			//Crea aliens
-			for (int i= 0; i< MathUtils.random(3,6); i++){
+			for (int j= 0; j< MathUtils.random(3,6); j++){
 				listaAliens.add(factory.createAlien(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
 					(Constantes.ALTO_PANTALLA*MathUtils.random(0.9f,1.5f)/(Constantes.PIXEL_A_METRO*2))));
-				listaAliens.get(i).setName(i);
+				listaAliens.get(j).setName(j);
 				// se añaden los aliens a la escena
-				stage.addActor(listaAliens.get(i));
+				stage.addActor(listaAliens.get(j));
 			}
 
-
-
 			stage.addActor(player);
-
 			stage.addActor(tablaPuntos);
 			stage.addActor(tablaVidas);
 
+
 			stage.setDebugAll(true);
 
+			//se coloca la camara
 			stage.getCamera().position.set(Constantes.ANCHO_PANTALLA/2, Constantes.ALTO_PANTALLA/2,0);
-
 			stage.getCamera().update();
-
 
 			// volumen de la música y se activa
 			backgroundMusic.setVolume(0.5f);
 			backgroundMusic.play();
-			System.out.println("pantalla de juego");
-
 
 		}
 
@@ -187,8 +198,6 @@ import Entidades.PlayerEntity;
 			player.detach();
 			for (AlienEntity alien : listaAliens)
 				alien.detach();
-
-			//laser.detach();
 			for (LaserEntity laser: listaLaser)
 				laser.detach();
 
@@ -204,17 +213,22 @@ import Entidades.PlayerEntity;
 		@Override
 		public void render(float delta) {
 			// se limpia la pantalla
-			Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
+			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+			//ponemos el fondo
+			batch.begin();
+			batch.draw(fondo, 0, 0, Constantes.ANCHO_PANTALLA, Constantes.ALTO_PANTALLA);
+			batch.end();
 
 			/**
 			 * aquí hacemos que cuando el jugador pulsa el botón la nave dispare
 			 */
 			if (Gdx.input.isButtonJustPressed(1)){
-				//solo se pueden tener 3 lasers en la pantalla
-				if (listaLaser.size() < 3) {
+				//solo se pueden tener 5 lasers en la pantalla
+				if (listaLaser.size() < 5) {
 					Vector2 posicionLaser = new Vector2(player.getPlayerPosition().x,
-							player.getPlayerPosition().y+player.getHeight()/Constantes.PIXEL_A_METRO);
+							player.getPlayerPosition().y/*+player.getHeight()/Constantes.PIXEL_A_METRO*/);
 					listaLaser.add(factory.createLaser(world, posicionLaser));
 					//sonido de disparo
 					laserDefensor.play();
@@ -222,7 +236,7 @@ import Entidades.PlayerEntity;
 				//se comprueba que los lasers desaparecen solos al cabo de un tiempo
 				for (int i = 0; i < listaLaser.size(); i++) {
 					stage.addActor(listaLaser.get(i));
-					listaLaser.get(i).vidaLaser(delta);
+					listaLaser.get(i).vidaLaser();
 					//se quitan de la lista para que se puedan disparar más
 					if (listaLaser.get(i) != null && !listaLaser.get(i).isAlive()) {
 						listaLaser.remove(i);
@@ -255,7 +269,11 @@ import Entidades.PlayerEntity;
 				));
 			}
 
-
+			//cambio de fase
+		/*	if (player.isAlive() && nuevaFase){
+				System.out.println("cambio de fase");
+				game.setScreen(game.gameScreen);
+			}*/
 			// actualiza el escenario a lo que necesitamos
 			stage.act();
 
@@ -322,12 +340,23 @@ import Entidades.PlayerEntity;
 						if (hayContacto(contact, listaLaser.get(i).getName(), listaAliens.get(j).getName())){
 							//muere el laser
 							listaLaser.get(i).setAlive(false);
+							listaLaser.get(i).remove();
 							//muere el alien y se quita de la lista
 							listaAliens.get(j).setAlive(false);
-							//listaAliens.remove(j);
+							System.out.println("antes " + listaAliens.size());
+							listaAliens.remove(j);
+							System.out.println("despues " + listaAliens.size());
 							//efecto de sonido
 							expCorta.play();
+							//sumamos puntos
 							points+= 100;
+							//renombramos los aliens para que no de error por nulo
+							for (Integer x = 0; x < listaAliens.size(); x++) {
+								listaAliens.get(x).setName(x);
+							}
+							if (listaAliens!= null && listaAliens.isEmpty()){
+								nuevaFase = true;
+							}
 							break;
 						}
 					}
@@ -339,9 +368,6 @@ import Entidades.PlayerEntity;
 						expLarga.play();
 					}
 				}
-
-
-
 
 			}
 
@@ -359,6 +385,7 @@ import Entidades.PlayerEntity;
 			public void postSolve(Contact contact, ContactImpulse impulse) {
 
 			}
+
 		}
 
 	public LaserEntity getLaser() {

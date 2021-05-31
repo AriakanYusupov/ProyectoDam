@@ -26,10 +26,6 @@ public class Box2DScreen extends BaseScreen {
 	private Body playerBody, alienBody, laserPlayerBody, laserAlienBody;
 	private Fixture playerFixture, alienFixture, laserPlayerFixture, laserAlienFixture;
 
-	private boolean isAlive= true;
-
-
-
 	public Box2DScreen(MainGame game){
 	super(game);
 	}
@@ -114,23 +110,15 @@ public class Box2DScreen extends BaseScreen {
 
 		}
 
-
-
 		@Override
 		public void endContact(Contact contact) {
-
 		}
-
 		@Override
 		public void preSolve(Contact contact, Manifold oldManifold) {
-
 		}
-
 		@Override
 		public void postSolve(Contact contact, ContactImpulse impulse) {
-
 		}
-
 	}
 
 

@@ -110,7 +110,7 @@ public class MenuScreen extends BaseScreen {
 		backgroundMusic.play();
 		// hacemos que el Input Systen maneje el Stage.
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
-				Gdx.input.setInputProcessor(stage);
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	/**

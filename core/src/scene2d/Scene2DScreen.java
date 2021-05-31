@@ -4,7 +4,6 @@ package scene2d;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.spacegame.BaseScreen;
@@ -32,16 +31,12 @@ public class Scene2DScreen extends BaseScreen {
 	//texturas usadas en los elementos
 	private Texture playerTexture, alienTexture, laserTexture;
 
-	//regiones de textura
-	private TextureRegion alienRegion;
-
 	public Scene2DScreen (MainGame game){
 		super(game);
 
 		// carga de texturas y regiones
 		playerTexture = new Texture("defensor.png");
 		alienTexture = new Texture("alien1.png");
-		alienRegion = new TextureRegion(alienTexture, 0, 64, 128, 64);
 		laserTexture = new Texture("laser.png");
 	}
 
@@ -55,7 +50,7 @@ public class Scene2DScreen extends BaseScreen {
 
 		//cargamos los actores
 		player = new PlayerActor(playerTexture);
-		alien = new AlienActor(alienRegion);
+		alien = new AlienActor(alienTexture);
 		laser = new LaserActor(laserTexture);
 		laserAlien = new LaserAlienActor(laserTexture);
 		player.setPosition(Constantes.ANCHO_PANTALLA/2, 100);
@@ -81,7 +76,7 @@ public class Scene2DScreen extends BaseScreen {
 	 */
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0.4f, 0.5f, 0.8f, 1f);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		stage.act();

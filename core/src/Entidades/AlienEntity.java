@@ -7,11 +7,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.spacegame.Constantes;
+import com.spacegame.ConstantesFisicas;
 
 /**
  * Clase Entidad del jugador
@@ -61,11 +63,19 @@ public class AlienEntity extends Actor{
 		fixture = body.createFixture(box, 3);
 		//nombre de la fixture para ser usada en maingame
 		fixture.setUserData("alien");
+		Filter filter = new Filter();
+		filter.categoryBits = ConstantesFisicas.CAT_ALIEN;
+		filter.maskBits= ConstantesFisicas.MASK_ALIEN;
+		filter.groupIndex= -1;
+		fixture.setFilterData(filter);
+
 		//se destruye la forma que ya no hace falta
+
 		box.dispose();
 
 		//se pone en un tamaño para que se vea, hay que usar la clase Constantes
-		setSize(Constantes.PIXEL_A_METRO, Constantes.PIXEL_A_METRO );
+		//el tamaño de la nave es de 1 metro de ancho por medio de alto
+		setSize(Constantes.PIXEL_A_METRO, Constantes.PIXEL_A_METRO/2 );
 
 		if(MathUtils.random(0,1)==1){
 			direccion= true;
@@ -106,6 +116,7 @@ public class AlienEntity extends Actor{
 
 		//el alien muere
 		if (!isAlive()){
+			body.setLinearVelocity(0,0);
 			remove();
 			body.destroyFixture(fixture);
 			world.destroyBody(body);

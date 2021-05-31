@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.spacegame.Constantes;
+import com.spacegame.ConstantesFisicas;
 
 /**
  * Clase Entidad del jugador
@@ -57,6 +59,12 @@ public class PlayerEntity extends Actor{
 		fixture = body.createFixture(box, 3);
 		//nombre de la fixture para ser usada en maingame
 		fixture.setUserData("player");
+
+		Filter filter = new Filter();
+		filter.categoryBits = ConstantesFisicas.CAT_PLAYER;
+		filter.maskBits= ConstantesFisicas.MASK_PLAYER;
+		filter.groupIndex = -2;
+		fixture.setFilterData(filter);
 		//se destruye la forma que ya no hace falta
 		box.dispose();
 
@@ -85,7 +93,7 @@ public class PlayerEntity extends Actor{
 	public void act(float delta) {
 
 		//controlamos la entrada para el movimiento de la nave
-		if (Gdx.input.isTouched()) {
+		if (Gdx.input.isTouched() && isAlive()) {
 			movePlayer(Gdx.input.getX());
 		} else stopPlayer();
 

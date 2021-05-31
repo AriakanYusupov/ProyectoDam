@@ -1,7 +1,7 @@
 package scene2d;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class AlienActor extends Actor {
@@ -9,7 +9,7 @@ public class AlienActor extends Actor {
 
 
 	//textura de alien
-	private TextureRegion alien;
+	private Texture alien;
 
 	//boolean para saber si está vivo
 	private boolean alive;
@@ -18,9 +18,9 @@ public class AlienActor extends Actor {
 	 * constructor
 	 * @param alien
 	 */
-	public AlienActor(TextureRegion alien) {
+	public AlienActor(Texture alien) {
 		this.alien = alien;
-		setSize(alien.getRegionWidth(), alien.getRegionHeight());
+		setSize(alien.getWidth(), alien.getHeight());
 		this.alive = true;
 	}
 
