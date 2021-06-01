@@ -79,12 +79,12 @@ import Entidades.PlayerEntity;
 		//private final Sound lose;
 
 		//tablas para insertar puntos y vidas
-		private Table tablaPuntos = new Table();
-		private Table tablaVidas = new Table();
+		private final Table tablaPuntos = new Table();
+		private final Table tablaVidas = new Table();
 		//labels
 		private Label labelPuntos, labelVidas, puntos, vidas;
 		//puntos y vidas
-		private Integer points, lifes;
+		private Integer points, lifes, nivel = 0;
 
 		//booleano para cambiar de fase
 		private boolean nuevaFase;
@@ -160,10 +160,14 @@ import Entidades.PlayerEntity;
 			player = factory.createPlayer(world, new Vector2(Constantes.ANCHO_PANTALLA/(Constantes.PIXEL_A_METRO*2), 1f));
 
 			//Crea aliens
-			for (int j= 0; j< MathUtils.random(3,6); j++){
+			for (int j= 0; j< MathUtils.random(3+nivel,6+nivel); j++){
 				listaAliens.add(factory.createAlien(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
 					(Constantes.ALTO_PANTALLA*MathUtils.random(0.9f,1.5f)/(Constantes.PIXEL_A_METRO*2))));
 				listaAliens.get(j).setName(j);
+				//cada 3 niveles se sube la velocidad de los aliens
+				if (nivel > 0 && nivel % 3== 0) {
+					listaAliens.get(j).increaseAlienSpeed();
+				}
 				// se añaden los aliens a la escena
 				stage.addActor(listaAliens.get(j));
 			}
@@ -221,9 +225,7 @@ import Entidades.PlayerEntity;
 			batch.draw(fondo, 0, 0, Constantes.ANCHO_PANTALLA, Constantes.ALTO_PANTALLA);
 			batch.end();
 
-			/**
-			 * aquí hacemos que cuando el jugador pulsa el botón la nave dispare
-			 */
+			//aquí hacemos que cuando el jugador pulsa el botón la nave dispare
 			if (Gdx.input.isButtonJustPressed(1)){
 				//solo se pueden tener 5 lasers en la pantalla
 				if (listaLaser.size() < 5) {
@@ -244,9 +246,7 @@ import Entidades.PlayerEntity;
 					}
 				}
 			}
-			/**
-			 * actualizamos los puntos
-			 */
+			//actualizamos los puntos
 			if (player.isAlive()){
 				puntos.setText(points.toString());
 			}
@@ -270,10 +270,16 @@ import Entidades.PlayerEntity;
 			}
 
 			//cambio de fase
-		/*	if (player.isAlive() && nuevaFase){
+			if (player.isAlive() && nuevaFase){
+				nuevaFase = false;
+				//cada nivel sube la posibilidad de más enemigos en la pantalla
+				nivel += 1;
+				System.out.println("nivel +1");
+				System.out.println("nivel" + nivel);
+
 				System.out.println("cambio de fase");
 				game.setScreen(game.gameScreen);
-			}*/
+			}
 			// actualiza el escenario a lo que necesitamos
 			stage.act();
 
@@ -340,12 +346,11 @@ import Entidades.PlayerEntity;
 						if (hayContacto(contact, listaLaser.get(i).getName(), listaAliens.get(j).getName())){
 							//muere el laser
 							listaLaser.get(i).setAlive(false);
+							listaLaser.get(i).cambiaGrupo();
 							listaLaser.get(i).remove();
 							//muere el alien y se quita de la lista
 							listaAliens.get(j).setAlive(false);
-							System.out.println("antes " + listaAliens.size());
 							listaAliens.remove(j);
-							System.out.println("despues " + listaAliens.size());
 							//efecto de sonido
 							expCorta.play();
 							//sumamos puntos
@@ -354,7 +359,7 @@ import Entidades.PlayerEntity;
 							for (Integer x = 0; x < listaAliens.size(); x++) {
 								listaAliens.get(x).setName(x);
 							}
-							if (listaAliens!= null && listaAliens.isEmpty()){
+							if (listaAliens.isEmpty()){
 								nuevaFase = true;
 							}
 							break;
@@ -387,13 +392,5 @@ import Entidades.PlayerEntity;
 			}
 
 		}
-
-	public LaserEntity getLaser() {
-		return laser;
-	}
-
-	public void setLaser(LaserEntity laser) {
-		this.laser = laser;
-	}
 
 }

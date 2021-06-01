@@ -189,6 +189,10 @@ public class AlienEntity extends Actor{
 	public void setStop(boolean stop) {
 		this.stop = stop;
 	}
+
+	public void increaseAlienSpeed (){
+		body.setLinearVelocity(body.getLinearVelocity().x*1.2f, body.getLinearVelocity().y*1.1f);
+	}
 }
 
 

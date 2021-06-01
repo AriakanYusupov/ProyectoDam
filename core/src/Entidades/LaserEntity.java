@@ -103,8 +103,6 @@ public class LaserEntity extends Actor {
 		}
 		//se elimina si no tiene que estar
 		if (!isAlive()){
-			filter.groupIndex= -1;
-			fixture.setFilterData(filter);
 			remove();
 
 		}
@@ -144,5 +142,11 @@ public class LaserEntity extends Actor {
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
+
+	public void cambiaGrupo(){
+		System.out.println("cambio de grupo");
+		filter.groupIndex= -1;
+		fixture.setFilterData(filter);
+		}
 
 }
