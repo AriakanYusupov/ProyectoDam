@@ -80,8 +80,8 @@ public class LaserEntity extends Actor {
 
 	/**
 	 * método para pintar
-	 * @param batch
-	 * @param parentAlpha
+	 * @param batch Batch
+	 * @param parentAlpha canal alfa del padre
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
@@ -92,7 +92,7 @@ public class LaserEntity extends Actor {
 	}
 
 	/**
-	 * metodo para que actualice es escenario
+	 * método para que actualice es escenario
 	 * @param delta en segundos
 	 */
 	@Override
@@ -109,6 +109,9 @@ public class LaserEntity extends Actor {
 
 	}
 
+	/**
+	 * método para limpiar la memoria
+	 */
 	public void detach() {
 		body.destroyFixture(fixture);
 		world.destroyBody(body);
@@ -123,7 +126,14 @@ public class LaserEntity extends Actor {
 		}
 	}
 
-
+	/**
+	 * método para que cuando un laser está muerto no pueda chocar con los aliens
+	 * por si no fuese eliminado del juego de manera inmediata tras morir
+	 */
+	public void cambiaGrupo(){
+		filter.groupIndex= -1;
+		fixture.setFilterData(filter);
+	}
 
 	@Override
 	public String getName() {
@@ -143,10 +153,5 @@ public class LaserEntity extends Actor {
 		this.alive = alive;
 	}
 
-	public void cambiaGrupo(){
-		System.out.println("cambio de grupo");
-		filter.groupIndex= -1;
-		fixture.setFilterData(filter);
-		}
 
 }

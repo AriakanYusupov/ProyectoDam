@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -55,7 +56,6 @@ public class LogInScreen extends BaseScreen {
 		usuario.setMaxLength(15);
 
 		password = new TextField("Password", skin);
-		password.isPasswordMode();
 		password.setMaxLength(12);
 
 		//se añaden los elementos a la tabla
@@ -74,7 +74,17 @@ public class LogInScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//lleva a la pantalla de juego
-				game.setScreen(game.menuScreen);
+				FileManager.cargarUserList();
+				if (FileManager.recuperarUserPassWord(usuario.getText(), password.getText())){
+					game.setScreen(game.menuScreen);
+				} else {
+					Dialog ventana = new Dialog("Error", skin);
+					ventana.text("Usurio o Password incorrectos").pad(40);
+					ventana.button("Aceptar").pad(20);
+					ventana.show(stage);
+				}
+
+
 			}
 		});
 
@@ -129,6 +139,24 @@ public class LogInScreen extends BaseScreen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		//hacemos que cuando el foco vaya a un textfield, este se borre
+		if (usuario.hasKeyboardFocus()){
+			if("Usuario".equals(usuario.getText())){
+				usuario.setText("");
+			}
+		}
+
+		//como son passwords no se puede ver lo que se escribe
+		if (password.hasKeyboardFocus()){
+			if("Password".equals(password.getText())) {
+				password.setText("");
+			}
+			password.setPasswordCharacter('*');
+			password.setPasswordMode(true);
+		}
+
+
 		stage.act();
 		stage.draw();
 	}

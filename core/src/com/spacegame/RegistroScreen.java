@@ -4,32 +4,34 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class RegistroScreen extends BaseScreen{
+public class RegistroScreen extends BaseScreen {
 
 	//instancia Stage de Scene2D
 	private Stage stage;
 
 	//Skin para los botones
-	private Skin skin;
+	private final Skin skin;
 
 	//interfaz de usuario
 	//botón
 	private TextButton salvar, volver;
 	//textfield
 	private TextField usuario, password1, password2;
-	//
 
+	private String user= null, pass1= null, pass2= null;
 
 
 	/**
 	 * Crea la pantalla de logarse
-	 * @param game
+	 * @param game instancia del juego
 	 */
 	public RegistroScreen(final MainGame game) {
 		super(game);
@@ -47,20 +49,44 @@ public class RegistroScreen extends BaseScreen{
 		usuario.setMaxLength(15);
 
 		password1 = new TextField("Password", skin);
-		password1.setPasswordMode(true);
 		password1.setMaxLength(12);
 
-		password2 = new TextField("Password", skin);
-		password2.setPasswordMode(true);
+		password2 = new TextField("Repetir Password", skin);
 		password2.setMaxLength(12);
+
+		Table tabla = new Table();
+		tabla.setFillParent(true);
 
 		// se añaden los capturadores de eventos.
 		//botón entrar
 		salvar.addCaptureListener(new ChangeListener() {
+
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//lleva a la pantalla de juego
-				game.setScreen(game.menuScreen);
+				//error si las claves para el registro no coinciden
+				if (!pass1.equals(pass2)){
+					Dialog vent = new Dialog("Error", skin);
+					vent.text("Las Contraseñas no coinciden").pad(40);
+					vent.button("Aceptar").pad(20);
+					vent.setScale(1.25f);
+					vent.show(stage);
+
+				} else {
+					FileManager.cargarUserList();
+					if (FileManager.usuarioRepetido(user)){
+						Dialog vent = new Dialog("Error", skin);
+						vent.text("Usuario repetido").pad(40);
+						vent.button("Aceptar").pad(20);
+						vent.setScale(1.25f);
+						vent.show(stage);
+					} else {
+						FileManager.incluirNuevoUser(user, pass1);
+						FileManager.salvarUserList();
+
+						//lleva a la pantalla de juego
+						game.setScreen(game.logInScreen);
+					}
+				}
 			}
 		});
 
@@ -76,24 +102,19 @@ public class RegistroScreen extends BaseScreen{
 
 		// tamaño y posicion de los botones
 		// el origen de coordenadas 0, 0 es la esquina inferior izquierda
-
-		usuario.setSize(300, 40);
-		usuario.setPosition(Constantes.ANCHO_PANTALLA/2-150,Constantes.ALTO_PANTALLA/2+80);
-		password1.setSize(300, 40);
-		password1.setPosition(Constantes.ANCHO_PANTALLA/2-150,Constantes.ALTO_PANTALLA/2);
-		password2.setSize(300, 40);
-		password2.setPosition(Constantes.ANCHO_PANTALLA/2-150,Constantes.ALTO_PANTALLA/2-80);
-		volver.setSize(100,40);
-		volver.setPosition(Constantes.ANCHO_PANTALLA/2-50,Constantes.ALTO_PANTALLA/2-250);
-		salvar.setSize(100, 40);
-		salvar.setPosition(Constantes.ANCHO_PANTALLA/2-50,Constantes.ALTO_PANTALLA/2-150);
+		tabla.add(usuario).colspan(2).size(600, 40);
+		tabla.row();
+		tabla.add(password1).colspan(2).size(600, 40);
+		tabla.row();
+		tabla.add(password2).colspan(2).size(600, 40);
+		tabla.row();
+		tabla.row();
+		tabla.add(salvar).size(300,80).pad(10);
+		tabla.add(volver).size(300,80).pad(10);
 
 		// se añaden los actores al stage para que se vean
-		stage.addActor(usuario);
-		stage.addActor(password1);
-		stage.addActor(password2);
-		stage.addActor(salvar);
-		stage.addActor(volver);
+
+		stage.addActor(tabla);
 	}
 
 	/**
@@ -103,6 +124,11 @@ public class RegistroScreen extends BaseScreen{
 	public void show() {
 		// hacemos que el Input Systen maneje el Stage.
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
+
+		usuario.setText("Usuario");
+		password1.setText("Password");
+		password2.setText("Repetir Password");
+
 		Gdx.input.setInputProcessor(stage);
 
 	}
@@ -133,6 +159,34 @@ public class RegistroScreen extends BaseScreen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		//hacemos que cuando el foco vaya a un textfield, este se borre
+		if (usuario.hasKeyboardFocus()){
+			if("Usuario".equals(usuario.getText())){
+				usuario.setText("");
+			}
+		}
+
+		//como son passwords no se puede ver lo que se escribe
+		if (password1.hasKeyboardFocus()){
+			if("Password".equals(password1.getText())) {
+				password1.setText("");
+			}
+			password1.setPasswordCharacter('*');
+			password1.setPasswordMode(true);
+		}
+		if (password2.hasKeyboardFocus()){
+			if( "Repetir Password".equals(password2.getText())){
+				password2.setText("");
+			}
+			password2.setPasswordCharacter('*');
+			password2.setPasswordMode(true);
+		}
+
+		user = usuario.getText();
+		pass1 = password1.getText();
+		pass2 = password2.getText();
+
 		stage.act();
 		stage.draw();
 	}

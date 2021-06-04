@@ -93,8 +93,8 @@ public class PlayerEntity extends Actor{
 	public void act(float delta) {
 
 		//controlamos la entrada para el movimiento de la nave
-		if (Gdx.input.isTouched() && isAlive()) {
-			movePlayer(Gdx.input.getX());
+		if (Gdx.input.isTouched(0) && isAlive()) {
+			movePlayer(Gdx.input.getX(0));
 		} else stopPlayer();
 
 	}

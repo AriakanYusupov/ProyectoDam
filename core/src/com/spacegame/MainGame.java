@@ -68,7 +68,7 @@ public class MainGame extends Game {
 		scoreScreen= new ScoreScreen(this);
 		registroScreen = new RegistroScreen(this);
 
-		setScreen(initScreen);
+		setScreen(registroScreen);
 	}
 
 	public AssetManager getManager() {

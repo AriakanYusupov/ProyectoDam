@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -17,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -65,8 +65,7 @@ import Entidades.PlayerEntity;
 		private Vector3 position;
 
 		//imagen del fondo
-		private SpriteBatch batch;
-		private Texture fondo;
+		private Image fondo;
 
 		// Musica de fondo
 		private final Music backgroundMusic;
@@ -74,6 +73,7 @@ import Entidades.PlayerEntity;
 		//efectos de sonido
 		private final Sound expCorta;
 		private final Sound expLarga;
+		private final Sound nuevoNivel;
 		private final Sound laserAlien;
 		private final Sound laserDefensor;
 		//private final Sound lose;
@@ -84,10 +84,12 @@ import Entidades.PlayerEntity;
 		//labels
 		private Label labelPuntos, labelVidas, puntos, vidas;
 		//puntos y vidas
-		private Integer points, lifes, nivel = 0;
+		private Integer points= 0, lifes, nivel = 0;
 
 		//booleano para cambiar de fase
 		private boolean nuevaFase;
+
+		boolean shoot = false;
 
 		//factory para poder crear los lasers
 		EntityFactory factory = new EntityFactory(game.getManager());
@@ -114,11 +116,11 @@ import Entidades.PlayerEntity;
 			expLarga = game.getManager().get("sound/Explosion_Larga.ogg");
 			laserAlien = game.getManager().get("sound/Laser_Alien.ogg");
 			laserDefensor = game.getManager().get("sound/Laser_Defensor.ogg");
+			nuevoNivel = game.getManager().get("sound/Fin_Nivel.ogg");
 			//lose = game.getManager().get("sound/Lose.ogg");
 			backgroundMusic = game.getManager().get("music/Punky.mp3");
 
 			//labels
-			points= 0;
 			labelPuntos = new Label("Puntos", skin);
 			labelVidas = new Label ("Vidas:", skin);
 			puntos = new Label(points.toString(), skin);
@@ -136,8 +138,8 @@ import Entidades.PlayerEntity;
 			nuevaFase = false;
 
 			//carga del fondo
-			batch = new SpriteBatch();
-			fondo = new Texture("fondo.png");
+			fondo = new Image(game.getManager().get("fondo.png", Texture.class));
+
 
 		}
 
@@ -147,13 +149,18 @@ import Entidades.PlayerEntity;
 		 */
 		@Override
 		public void show() {
+			//reseteamos los puntos
+			if (nivel == 0){
+				points = 0;
+			}
 
 			listaAliens = new ArrayList<>();
 			listaLaserAlien= new ArrayList<>();
 			listaLaser = new ArrayList<>();
 
-			stage.setDebugAll(true);
-
+			//stage.setDebugAll(true);
+			//cargamos el fondo lo primero para que salga detras
+			stage.addActor(fondo);
 
 			// Crea al jugador y lo pone en su posición inicial
 			//como la escena está en metros hay que calcular el valor central de la pantalla usando la constante de conversión
@@ -162,11 +169,14 @@ import Entidades.PlayerEntity;
 			//Crea aliens
 			for (int j= 0; j< MathUtils.random(3+nivel,6+nivel); j++){
 				listaAliens.add(factory.createAlien(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
-					(Constantes.ALTO_PANTALLA*MathUtils.random(0.9f,1.5f)/(Constantes.PIXEL_A_METRO*2))));
+					(Constantes.ALTO_PANTALLA*MathUtils.random(1f,1.6f)/(Constantes.PIXEL_A_METRO*2))));
 				listaAliens.get(j).setName(j);
 				//cada 3 niveles se sube la velocidad de los aliens
 				if (nivel > 0 && nivel % 3== 0) {
 					listaAliens.get(j).increaseAlienSpeed();
+				}
+				if (nivel >0 && nivel % 2 == 0){
+					listaAliens.get(j).setPosition(listaAliens.get(j).getX(), (listaAliens.get(j).getY())*1.2f);
 				}
 				// se añaden los aliens a la escena
 				stage.addActor(listaAliens.get(j));
@@ -175,9 +185,6 @@ import Entidades.PlayerEntity;
 			stage.addActor(player);
 			stage.addActor(tablaPuntos);
 			stage.addActor(tablaVidas);
-
-
-			stage.setDebugAll(true);
 
 			//se coloca la camara
 			stage.getCamera().position.set(Constantes.ANCHO_PANTALLA/2, Constantes.ALTO_PANTALLA/2,0);
@@ -220,30 +227,14 @@ import Entidades.PlayerEntity;
 			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-			//ponemos el fondo
-			batch.begin();
-			batch.draw(fondo, 0, 0, Constantes.ANCHO_PANTALLA, Constantes.ALTO_PANTALLA);
-			batch.end();
-
 			//aquí hacemos que cuando el jugador pulsa el botón la nave dispare
-			if (Gdx.input.isButtonJustPressed(1)){
-				//solo se pueden tener 5 lasers en la pantalla
-				if (listaLaser.size() < 5) {
-					Vector2 posicionLaser = new Vector2(player.getPlayerPosition().x,
-							player.getPlayerPosition().y/*+player.getHeight()/Constantes.PIXEL_A_METRO*/);
-					listaLaser.add(factory.createLaser(world, posicionLaser));
-					//sonido de disparo
-					laserDefensor.play();
-				}
-				//se comprueba que los lasers desaparecen solos al cabo de un tiempo
-				for (int i = 0; i < listaLaser.size(); i++) {
-					stage.addActor(listaLaser.get(i));
-					listaLaser.get(i).vidaLaser();
-					//se quitan de la lista para que se puedan disparar más
-					if (listaLaser.get(i) != null && !listaLaser.get(i).isAlive()) {
-						listaLaser.remove(i);
-						i--;
-					}
+			//el 62 es el código de la barra espacio
+			if (Gdx.input.isKeyJustPressed(62)){
+				disparalaser();
+			}
+			if (Gdx.input.isTouched(1) ){
+				if (Gdx.input.justTouched()){
+					disparalaser();
 				}
 			}
 			//actualizamos los puntos
@@ -255,6 +246,7 @@ import Entidades.PlayerEntity;
 				backgroundMusic.stop();
 				//paramos los aliens
 				stopAliens();
+				nivel = 0;
 
 				stage.addAction(Actions.sequence(
 						//esperamos un segundo para cambiar de pantalla
@@ -269,16 +261,28 @@ import Entidades.PlayerEntity;
 				));
 			}
 
-			//cambio de fase
+			//cambio de nivel
 			if (player.isAlive() && nuevaFase){
+				nuevoNivel.play();
 				nuevaFase = false;
+
 				//cada nivel sube la posibilidad de más enemigos en la pantalla
 				nivel += 1;
 				System.out.println("nivel +1");
 				System.out.println("nivel" + nivel);
 
 				System.out.println("cambio de fase");
-				game.setScreen(game.gameScreen);
+				stage.addAction(Actions.sequence(
+						//esperamos un segundo para cambiar de pantalla
+						Actions.delay(1f),
+						Actions.run(new Runnable() {
+							@Override
+							public void run() {
+								//cambiamos de pantalla
+								game.setScreen(game.gameScreen);
+							}
+						})
+				));
 			}
 			// actualiza el escenario a lo que necesitamos
 			stage.act();
@@ -302,6 +306,28 @@ import Entidades.PlayerEntity;
 			world.dispose();
 		}
 
+	/**
+	 * método para dispara el lasser
+	 */
+		private void disparalaser(){
+			if (listaLaser.size() < 5) {
+				Vector2 posicionLaser = new Vector2(player.getPlayerPosition().x,
+						player.getPlayerPosition().y/*+player.getHeight()/Constantes.PIXEL_A_METRO*/);
+				listaLaser.add(factory.createLaser(world, posicionLaser));
+				//sonido de disparo
+				laserDefensor.play();
+			}
+			//se comprueba que los lasers desaparecen solos al cabo de un tiempo
+			for (int i = 0; i < listaLaser.size(); i++) {
+				stage.addActor(listaLaser.get(i));
+				listaLaser.get(i).vidaLaser();
+				//se quitan de la lista para que se puedan disparar más
+				if (listaLaser.get(i) != null && !listaLaser.get(i).isAlive()) {
+					listaLaser.remove(i);
+					i--;
+				}
+			}
+		}
 	/**
 	 * método para parar todos los aliens
 	 */
@@ -356,7 +382,7 @@ import Entidades.PlayerEntity;
 							//sumamos puntos
 							points+= 100;
 							//renombramos los aliens para que no de error por nulo
-							for (Integer x = 0; x < listaAliens.size(); x++) {
+							for (int x = 0; x < listaAliens.size(); x++) {
 								listaAliens.get(x).setName(x);
 							}
 							if (listaAliens.isEmpty()){
