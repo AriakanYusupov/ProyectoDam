@@ -14,7 +14,6 @@ public class MainGame extends Game {
 
 	/**
 	 * objeto para controlar los recursos de manera centralizada
-	 *
 	 */
 	private AssetManager manager;
 
@@ -35,11 +34,13 @@ public class MainGame extends Game {
 		manager.load("defensor.png", Texture.class);
 		manager.load("alien1.png", Texture.class);
 		//manager.load("alien2.png", Texture.class);
-		manager.load("laser.png",Texture.class);
+		manager.load("laser.png", Texture.class);
 		manager.load("laseralien.png", Texture.class);
 		manager.load("gameover.png", Texture.class);
 		manager.load("fondo.png", Texture.class);
+		manager.load("fondo2.png", Texture.class);
 		manager.load("titulo.png", Texture.class);
+		manager.load("highscores.png", Texture.class);
 
 		manager.load("sound/Cuenta_Atras.ogg", Sound.class);
 		manager.load("sound/Explosion_Corta.ogg", Sound.class);
@@ -53,6 +54,7 @@ public class MainGame extends Game {
 		// Enter the loading screen to load the assets.
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
+
 	}
 
 	/**
@@ -60,15 +62,16 @@ public class MainGame extends Game {
 	 * Se cargan las demás pantallas y va a la pantalla principal cuando está listo.
 	 */
 	public void finishLoading() {
+
 		initScreen = new InitScreen(this);
 		logInScreen = new LogInScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
 		gameOverScreen = new GameOverScreen(this);
-		scoreScreen= new ScoreScreen(this);
+		scoreScreen = new ScoreScreen(this);
 		registroScreen = new RegistroScreen(this);
 
-		setScreen(registroScreen);
+		setScreen(initScreen);
 	}
 
 	public AssetManager getManager() {

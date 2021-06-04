@@ -6,11 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.spacegame.BaseScreen;
 import com.spacegame.MainGame;
@@ -60,9 +56,6 @@ public class Box2DScreen extends BaseScreen {
 		laserPlayerFixture.setUserData("laserPlayer");
 		laserAlienFixture.setUserData("laserAlien");
 
-		// indicamos el contact Listener para controlar colisiones
-		world.setContactListener(new Box2DScreenContactListener());
-
 	}
 
 	@Override
@@ -97,29 +90,5 @@ public class Box2DScreen extends BaseScreen {
 	public void hide() {
 
 	}
-
-
-	/**
-	 * clase interna para majerar colisiones
-	 */
-	private class Box2DScreenContactListener implements ContactListener {
-
-		@Override
-		public void beginContact(Contact contact) {
-			// Get the fixtures.
-
-		}
-
-		@Override
-		public void endContact(Contact contact) {
-		}
-		@Override
-		public void preSolve(Contact contact, Manifold oldManifold) {
-		}
-		@Override
-		public void postSolve(Contact contact, ContactImpulse impulse) {
-		}
-	}
-
 
 }

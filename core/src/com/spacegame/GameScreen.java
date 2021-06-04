@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
@@ -80,19 +81,20 @@ import Entidades.PlayerEntity;
 
 		//tablas para insertar puntos y vidas
 		private final Table tablaPuntos = new Table();
-		private final Table tablaVidas = new Table();
+		private final Table tablaNivel = new Table();
+
 		//labels
-		private Label labelPuntos, labelVidas, puntos, vidas;
+		private Label labelPuntos, labelNivel, puntos, nivelTexto;
 		//puntos y vidas
-		private Integer points= 0, lifes, nivel = 0;
+		private Integer points= 0, nivel = 0;
 
 		//booleano para cambiar de fase
 		private boolean nuevaFase;
 
-		boolean shoot = false;
-
 		//factory para poder crear los lasers
 		EntityFactory factory = new EntityFactory(game.getManager());
+
+		private String usuario= null;
 
 		/**
 		 * Crea la pantalla.
@@ -100,7 +102,9 @@ import Entidades.PlayerEntity;
 		 */
 		public GameScreen(MainGame game) {
 			super(game);
-
+			if (FileManager.getUserData()!= null){
+				usuario = FileManager.getUserData().getNombreUsuario();
+				}
 			// nuevo escenario
 			stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
 
@@ -122,26 +126,26 @@ import Entidades.PlayerEntity;
 
 			//labels
 			labelPuntos = new Label("Puntos", skin);
-			labelVidas = new Label ("Vidas:", skin);
+			labelNivel = new Label ("Nivel:", skin);
 			puntos = new Label(points.toString(), skin);
-			vidas = new Label("3", skin);
+			puntos.setAlignment(Align.right);
+			nivelTexto = new Label(nivel.toString(), skin);
+			nivelTexto.setAlignment(Align.right);
 
 			tablaPuntos.add(labelPuntos).left();
 			tablaPuntos.add(puntos).right();
 			tablaPuntos.setPosition(20,Constantes.ALTO_PANTALLA-20);
 			tablaPuntos.setSize(150,8);
-			tablaVidas.add(labelVidas).left();
-			tablaVidas.add(vidas).right();
-			tablaVidas.setPosition(Constantes.ANCHO_PANTALLA-100,Constantes.ALTO_PANTALLA-20);
-			tablaVidas.setSize(100,8);
+			tablaNivel.add(labelNivel).left();
+			tablaNivel.add(nivelTexto).right();
+			tablaNivel.setPosition(Constantes.ANCHO_PANTALLA-100,Constantes.ALTO_PANTALLA-20);
+			tablaNivel.setSize(100,8);
 
 			nuevaFase = false;
 
 			//carga del fondo
 			fondo = new Image(game.getManager().get("fondo.png", Texture.class));
-
-
-		}
+			}
 
 		/**
 		 * método que se ejecuta justo antes de mostrar la pantalla
@@ -149,6 +153,7 @@ import Entidades.PlayerEntity;
 		 */
 		@Override
 		public void show() {
+
 			//reseteamos los puntos
 			if (nivel == 0){
 				points = 0;
@@ -184,7 +189,7 @@ import Entidades.PlayerEntity;
 
 			stage.addActor(player);
 			stage.addActor(tablaPuntos);
-			stage.addActor(tablaVidas);
+			stage.addActor(tablaNivel);
 
 			//se coloca la camara
 			stage.getCamera().position.set(Constantes.ANCHO_PANTALLA/2, Constantes.ALTO_PANTALLA/2,0);
@@ -240,6 +245,7 @@ import Entidades.PlayerEntity;
 			//actualizamos los puntos
 			if (player.isAlive()){
 				puntos.setText(points.toString());
+				nivelTexto.setText(nivel.toString());
 			}
 			//el jugador muere, se va a GAME OVER
 			if (!player.isAlive()){
@@ -247,7 +253,10 @@ import Entidades.PlayerEntity;
 				//paramos los aliens
 				stopAliens();
 				nivel = 0;
-
+				//pasamos los puntos para que se puedan guardar
+				if (FileManager.getUserData()!= null) {
+					FileManager.getUserData().setPuntosObtenidos(points);
+				}
 				stage.addAction(Actions.sequence(
 						//esperamos un segundo para cambiar de pantalla
 						Actions.delay(1.5f),
@@ -263,23 +272,21 @@ import Entidades.PlayerEntity;
 
 			//cambio de nivel
 			if (player.isAlive() && nuevaFase){
+				backgroundMusic.pause();
 				nuevoNivel.play();
 				nuevaFase = false;
 
 				//cada nivel sube la posibilidad de más enemigos en la pantalla
 				nivel += 1;
-				System.out.println("nivel +1");
-				System.out.println("nivel" + nivel);
-
-				System.out.println("cambio de fase");
 				stage.addAction(Actions.sequence(
 						//esperamos un segundo para cambiar de pantalla
-						Actions.delay(1f),
+						Actions.delay(2f),
 						Actions.run(new Runnable() {
 							@Override
 							public void run() {
 								//cambiamos de pantalla
 								game.setScreen(game.gameScreen);
+								backgroundMusic.play();
 							}
 						})
 				));
@@ -310,7 +317,7 @@ import Entidades.PlayerEntity;
 	 * método para dispara el lasser
 	 */
 		private void disparalaser(){
-			if (listaLaser.size() < 5) {
+			if (player.isAlive() && listaLaser.size() < 5) {
 				Vector2 posicionLaser = new Vector2(player.getPlayerPosition().x,
 						player.getPlayerPosition().y/*+player.getHeight()/Constantes.PIXEL_A_METRO*/);
 				listaLaser.add(factory.createLaser(world, posicionLaser));
@@ -336,7 +343,8 @@ import Entidades.PlayerEntity;
 			listaAliens.get(i).setStop(true);
 		}
 
-		/**
+
+	/**
 		 * Clase que controla las colisiones.
 		 * a implementar.
 		 */

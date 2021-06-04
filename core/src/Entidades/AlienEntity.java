@@ -84,8 +84,8 @@ public class AlienEntity extends Actor{
 
 	/**
 	 * método para pintar
-	 * @param batch
-	 * @param parentAlpha
+	 * @param batch Batch
+	 * @param parentAlpha canal alfa del padre
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
@@ -134,15 +134,15 @@ public class AlienEntity extends Actor{
 	private void moveAlien() {
 		//la dirección en que se mueven al principio se elige al azar
 		//se mueve a la derecha
-		if (direccion == true) {
-			body.setLinearVelocity(4, -1);
+		if (direccion) {
+			body.setLinearVelocity(3.5f, -0.5f);
 			//llega al límite de la pantalla cambia de sentido
 			if (body.getPosition().x * Constantes.PIXEL_A_METRO >= 960) {
 				direccion = !direccion;
 			}
 		//se mueve a la izquierda
 		} else {
-			body.setLinearVelocity(-4, -1);
+			body.setLinearVelocity(-3.5f, -0.5f);
 			//llega al límite y cambia de sentido
 			if (body.getPosition().x * Constantes.PIXEL_A_METRO <= 0) {
 				direccion = !direccion;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class UserList implements Serializable {
 
+
 	private ArrayList<String> names;
 	private ArrayList<String> passwords;
 

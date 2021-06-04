@@ -25,7 +25,7 @@ public class MenuScreen extends BaseScreen {
 	private Skin skin;
 
 	//imagen
-	private Image logo;
+	private Image logo, fondo;
 
 	//botones
 	private TextButton jugar, puntuacion, salir;
@@ -66,6 +66,9 @@ public class MenuScreen extends BaseScreen {
 
 
 		// si hay que cargar una imagen, se hace así
+		fondo = new Image(game.getManager().get("fondo2.png", Texture.class));
+		fondo.setBounds(0,0,Constantes.ANCHO_PANTALLA, Constantes.ALTO_PANTALLA);
+		stage.addActor(fondo);
 		logo = new Image(game.getManager().get("defensor.png", Texture.class));
 		logo.rotateBy(-90);
 		logo.setPosition(logo.getHeight(), (Constantes.ALTO_PANTALLA+logo.getHeight())/2);
@@ -76,6 +79,7 @@ public class MenuScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//lleva a la pantalla de juego
+
 				game.setScreen(game.gameScreen);
 			}
 		});
@@ -138,7 +142,7 @@ public class MenuScreen extends BaseScreen {
 	@Override
 	public void render(float delta) {
 		//color en RGB de 0 a 1
-		Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1f);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();
 		stage.draw();

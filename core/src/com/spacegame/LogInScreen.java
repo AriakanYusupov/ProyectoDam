@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -21,16 +23,15 @@ public class LogInScreen extends BaseScreen {
 	private Stage stage;
 
 	//Skin para los botones
-	private Skin skin;
+	private final Skin skin;
 
 	//interfaz de usuario
 	//botón
 	private TextButton entrar, registrar;
 	//textfield
-	private TextField usuario, password;
-	//
-
-
+	private TextField usuarioNombre, password;
+	//imagebuton invisible
+	private ImageButton invisible;
 
 	/**
 	 * Crea la pantalla de logarse
@@ -47,19 +48,25 @@ public class LogInScreen extends BaseScreen {
 		Table tabla = new Table();
 		tabla.setFillParent(true);
 
+		//boton para quitar focus a los demás actores
+		ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+		style.up = null;
+		style.down = null;
+		invisible = new ImageButton(style);
+
 		//creamos el boton. el primer parametro es el texto a mostrar, el segundo la skin a usar
 		entrar = new TextButton("Entrar", skin);
 		registrar = new TextButton("Registrar nuevo usuario", skin);
 
 		//creamos los textFields
-		usuario= new TextField("Usuario", skin);
-		usuario.setMaxLength(15);
+		usuarioNombre = new TextField("Usuario", skin);
+		usuarioNombre.setMaxLength(15);
 
 		password = new TextField("Password", skin);
 		password.setMaxLength(12);
 
 		//se añaden los elementos a la tabla
-		tabla.add(usuario).size(300,80).pad(10);
+		tabla.add(usuarioNombre).size(300,80).pad(10);
 		tabla.row();
 		tabla.add(password).size(300,80).pad(10);
 		tabla.row();
@@ -68,27 +75,37 @@ public class LogInScreen extends BaseScreen {
 		tabla.add(registrar).size(300,80).pad(10);
 		tabla.row();
 
+		//se apilan los elementos para que ocupen el mismo espacio
+		Stack apilar = new Stack();
+		apilar.addActor(invisible);
+		apilar.addActor(tabla);
+		apilar.setBounds(0,0,Constantes.ANCHO_PANTALLA, Constantes.ALTO_PANTALLA);
+
 		// se añaden los capturadores de eventos.
-		//botón entrar
+		//botón entrar al menú del juego
 		entrar.addCaptureListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//lleva a la pantalla de juego
 				FileManager.cargarUserList();
-				if (FileManager.recuperarUserPassWord(usuario.getText(), password.getText())){
+				if (FileManager.recuperarUserPassWord(usuarioNombre.getText(), password.getText())){
+					if (!FileManager.existeFile(FileManager.setNombreFicheroUser(usuarioNombre.getText()))) {
+						FileManager.inicioUser(usuarioNombre.getText());
+						System.out.println(FileManager.getUserData().getNombreUsuario());
+					} else{
+						FileManager.cargarUserData(FileManager.setNombreFicheroUser(usuarioNombre.getText()));
+					}
 					game.setScreen(game.menuScreen);
 				} else {
 					Dialog ventana = new Dialog("Error", skin);
-					ventana.text("Usurio o Password incorrectos").pad(40);
+					ventana.text("Usurio o Password incorrecto").pad(40);
 					ventana.button("Aceptar").pad(20);
 					ventana.show(stage);
 				}
-
-
 			}
 		});
 
-		// se añaden los capturadores de eventos.
+		//botón para ir a la pantalla de registro de usuarios
 		registrar.addCaptureListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -97,16 +114,27 @@ public class LogInScreen extends BaseScreen {
 			}
 		});
 
+		//botón para quitar foco a lo demás
+		invisible.addCaptureListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				//lleva a la pantalla de juego
+				stage.unfocusAll();
+				Gdx.input.setOnscreenKeyboardVisible(false);
+			}
+		});
+
 
 	// se añaden los actores al stage para que se vean
-			stage.addActor(tabla);
+			stage.addActor(apilar);
 	}
+
 
 	/**
 	 * método para que muestre la pantalla al entrar
 	 */
 	@Override
 	public void show() {
+
 		// hacemos que el Input Systen maneje el Stage.
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
 		Gdx.input.setInputProcessor(stage);
@@ -131,6 +159,8 @@ public class LogInScreen extends BaseScreen {
 		skin.dispose();
 	}
 
+
+
 	/**
 	 * método que pinta la pantalla según pasa el tiempo
 	 * @param delta es el tiempo (en segundos) entre frames
@@ -141,9 +171,9 @@ public class LogInScreen extends BaseScreen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		//hacemos que cuando el foco vaya a un textfield, este se borre
-		if (usuario.hasKeyboardFocus()){
-			if("Usuario".equals(usuario.getText())){
-				usuario.setText("");
+		if (usuarioNombre.hasKeyboardFocus()){
+			if("Usuario".equals(usuarioNombre.getText())){
+				usuarioNombre.setText("");
 			}
 		}
 
@@ -160,6 +190,5 @@ public class LogInScreen extends BaseScreen {
 		stage.act();
 		stage.draw();
 	}
-
 
 }

@@ -20,5 +20,7 @@ public class Constantes {
 	public static final float ALTO_PANTALLA = 540f;
 
 	public static final float VIDA_LASER = 1.5f;
+
+	public static final int LISTADO_PUNTUACION_MAXIMA = 10;
 }
 

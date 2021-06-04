@@ -18,7 +18,7 @@ public abstract class BaseScreen implements Screen {
   * instancia de Game. Al hacer el constructor protected
   * todas las pantallas se pueden conectar al juego.
   */
-   protected   MainGame game;
+   protected MainGame game;
 
    public BaseScreen(MainGame game){
      this.game = game;
@@ -80,4 +80,5 @@ public abstract class BaseScreen implements Screen {
     public void dispose() {
 
     }
+
 }

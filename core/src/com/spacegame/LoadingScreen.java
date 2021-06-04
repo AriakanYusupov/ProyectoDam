@@ -51,7 +51,7 @@ public class LoadingScreen extends BaseScreen {
 	 */
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// método para cargar los recursos
@@ -76,4 +76,5 @@ public class LoadingScreen extends BaseScreen {
 		stage.dispose();
 		skin.dispose();
 	}
+
 }

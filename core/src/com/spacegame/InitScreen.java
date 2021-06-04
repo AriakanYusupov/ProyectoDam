@@ -78,7 +78,7 @@ public class InitScreen extends BaseScreen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (Gdx.input.justTouched()){
-			game.setScreen(game.menuScreen);
+			game.setScreen(game.logInScreen);
 		}
 
 		stage.act();

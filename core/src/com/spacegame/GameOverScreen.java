@@ -88,7 +88,7 @@ public class GameOverScreen extends BaseScreen{
 
 		stage.addActor(tabla);
 
-	}
+		}
 	/**
 	 * método para que muestre la pantalla al entrar
 	 */
@@ -96,6 +96,14 @@ public class GameOverScreen extends BaseScreen{
 	public void show() {
 
 		lose.play();
+
+		if (FileManager.getUserData()!= null) {
+			System.out.println("nombre " + FileManager.getUserData().getNombreUsuario()+
+					                   " puntos "+FileManager.getUserData().getPuntosObtenidos());
+			FileManager.getUserData().cambiarListaPuntos(FileManager.getUserData().getPuntosObtenidos());
+			FileManager.salvarUserData();
+		}
+
 
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
 		Gdx.input.setInputProcessor(stage);
@@ -126,12 +134,13 @@ public class GameOverScreen extends BaseScreen{
 	@Override
 	public void render(float delta) {
 		//color en RGB de 0 a 1
+
 		Gdx.gl.glClearColor(0.0f, 0.06f, 0.21f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		stage.act();
 		stage.draw();
 	}
-
 }
 
 

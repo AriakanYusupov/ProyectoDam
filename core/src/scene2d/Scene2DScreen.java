@@ -102,5 +102,4 @@ public class Scene2DScreen extends BaseScreen {
 
 		stage.dispose();
 	}
-
 }

@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -25,6 +27,8 @@ public class RegistroScreen extends BaseScreen {
 	private TextButton salvar, volver;
 	//textfield
 	private TextField usuario, password1, password2;
+	//imagebuton invisible
+	private ImageButton invisible;
 
 	private String user= null, pass1= null, pass2= null;
 
@@ -54,8 +58,21 @@ public class RegistroScreen extends BaseScreen {
 		password2 = new TextField("Repetir Password", skin);
 		password2.setMaxLength(12);
 
+		//boton para quitar focus a los demás actores
+		ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+		style.up = null;
+		style.down = null;
+		invisible = new ImageButton(style);
+
 		Table tabla = new Table();
 		tabla.setFillParent(true);
+
+		//se apilan los elementos para que ocupen el mismo espacio
+		Stack apilar = new Stack();
+		apilar.addActor(invisible);
+		apilar.addActor(tabla);
+		apilar.setBounds(0,0,Constantes.ANCHO_PANTALLA, Constantes.ALTO_PANTALLA);
+
 
 		// se añaden los capturadores de eventos.
 		//botón entrar
@@ -99,6 +116,15 @@ public class RegistroScreen extends BaseScreen {
 			}
 		});
 
+		//botón para quitar foco a lo demás
+		invisible.addCaptureListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				//lleva a la pantalla de juego
+				stage.unfocusAll();
+				Gdx.input.setOnscreenKeyboardVisible(false);
+			}
+		});
+
 
 		// tamaño y posicion de los botones
 		// el origen de coordenadas 0, 0 es la esquina inferior izquierda
@@ -114,7 +140,7 @@ public class RegistroScreen extends BaseScreen {
 
 		// se añaden los actores al stage para que se vean
 
-		stage.addActor(tabla);
+		stage.addActor(apilar);
 	}
 
 	/**
@@ -181,6 +207,10 @@ public class RegistroScreen extends BaseScreen {
 			}
 			password2.setPasswordCharacter('*');
 			password2.setPasswordMode(true);
+		}
+
+		if (!usuario.hasKeyboardFocus() && !password1.hasKeyboardFocus() && !password2.hasKeyboardFocus()){
+			Gdx.input.setOnscreenKeyboardVisible(false);
 		}
 
 		user = usuario.getText();
