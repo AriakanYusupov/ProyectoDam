@@ -98,12 +98,10 @@ public class GameOverScreen extends BaseScreen{
 		lose.play();
 
 		if (FileManager.getUserData()!= null) {
-			System.out.println("nombre " + FileManager.getUserData().getNombreUsuario()+
-					                   " puntos "+FileManager.getUserData().getPuntosObtenidos());
-			FileManager.getUserData().cambiarListaPuntos(FileManager.getUserData().getPuntosObtenidos());
+			FileManager.getUserData().cambiarListaPuntos(FileManager.getUserData().getPuntosObtenidos(), FileManager.getUserData().getNivelAlcanzado());
 			FileManager.salvarUserData();
-		}
-
+			GameScreen.setNivelStatic(0);
+			}
 
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
 		Gdx.input.setInputProcessor(stage);

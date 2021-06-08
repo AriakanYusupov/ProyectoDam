@@ -87,6 +87,7 @@ import Entidades.PlayerEntity;
 		private Label labelPuntos, labelNivel, puntos, nivelTexto;
 		//puntos y vidas
 		private Integer points= 0, nivel = 0;
+		private static int nivelStatic= 0;
 
 		//booleano para cambiar de fase
 		private boolean nuevaFase;
@@ -147,13 +148,16 @@ import Entidades.PlayerEntity;
 			fondo = new Image(game.getManager().get("fondo.png", Texture.class));
 			}
 
-		/**
+
+
+	/**
 		 * método que se ejecuta justo antes de mostrar la pantalla
 		 * se pone el estado inicial del juego
 		 */
 		@Override
 		public void show() {
 
+			nivel = nivelStatic;
 			//reseteamos los puntos
 			if (nivel == 0){
 				points = 0;
@@ -252,11 +256,13 @@ import Entidades.PlayerEntity;
 				backgroundMusic.stop();
 				//paramos los aliens
 				stopAliens();
-				nivel = 0;
+
 				//pasamos los puntos para que se puedan guardar
 				if (FileManager.getUserData()!= null) {
 					FileManager.getUserData().setPuntosObtenidos(points);
-				}
+					FileManager.getUserData().setNivelAlcanzado(nivel);
+					}
+
 				stage.addAction(Actions.sequence(
 						//esperamos un segundo para cambiar de pantalla
 						Actions.delay(1.5f),
@@ -277,7 +283,7 @@ import Entidades.PlayerEntity;
 				nuevaFase = false;
 
 				//cada nivel sube la posibilidad de más enemigos en la pantalla
-				nivel += 1;
+				nivelStatic += 1;
 				stage.addAction(Actions.sequence(
 						//esperamos un segundo para cambiar de pantalla
 						Actions.delay(2f),
@@ -343,8 +349,15 @@ import Entidades.PlayerEntity;
 			listaAliens.get(i).setStop(true);
 		}
 
+	public static int getNivelStatic() {
+		return nivelStatic;
+	}
 
-	/**
+	public static void setNivelStatic(int nivelStatic) {
+		GameScreen.nivelStatic = nivelStatic;
+	}
+
+		/**
 		 * Clase que controla las colisiones.
 		 * a implementar.
 		 */

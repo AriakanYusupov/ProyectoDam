@@ -104,17 +104,22 @@ public class ScoreScreen extends BaseScreen{
 				//miramos que la fecha sea nueva, si no es actual no se pone en el listado
 				if (userData.getFechasPuntosMax()[i].after(fechainit)) {
 						String puntuacion = userData.getPuntuacion(userData.getPuntosMax()[i]);
+						String nivelMax = userData.getNivel(userData.getNivelMax()[i]);
 						Label puntos = new Label(puntuacion, skin);
+						puntos.setAlignment(Align.right);
+						Label nivel = new Label(nivelMax, skin);
+						nivel.setAlignment(Align.center);
 						DateFormat Date = DateFormat.getDateInstance();
 						Label fechaTabla = new Label(Date.format(userData.getFechasPuntosMax()[i]), skin);
 						fechaTabla.setAlignment(Align.right);
-						tabla.add(puntos).size(150, 20);
-						tabla.add(fechaTabla).size(150, 20);
+						tabla.add(puntos).size(100, 20);
+						tabla.add(nivel).size(100,20);
+						tabla.add(fechaTabla).size(100, 20);
 						tabla.row();
 				}
 			}
 			tabla.row();
-			tabla.add(volver).fill().colspan(2);
+			tabla.add(volver).fill().colspan(3);
 		}
 
 		stage.addActor(tabla);
