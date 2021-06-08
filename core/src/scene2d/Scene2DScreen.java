@@ -23,13 +23,14 @@ public class Scene2DScreen extends BaseScreen {
 
 	//aliens
 	private AlienActor alien;
+	private AlienShooterActor alienShooter;
 
 	//laser
 	private LaserActor laser;
 	private LaserAlienActor laserAlien;
 
 	//texturas usadas en los elementos
-	private Texture playerTexture, alienTexture, laserTexture;
+	private Texture playerTexture, alienTexture, alienShooterTexture, laserTexture;
 
 	public Scene2DScreen (MainGame game){
 		super(game);
@@ -37,6 +38,7 @@ public class Scene2DScreen extends BaseScreen {
 		// carga de texturas y regiones
 		playerTexture = new Texture("defensor.png");
 		alienTexture = new Texture("alien1.png");
+		alienShooterTexture = new Texture("alien2.png");
 		laserTexture = new Texture("laser.png");
 	}
 
@@ -51,6 +53,7 @@ public class Scene2DScreen extends BaseScreen {
 		//cargamos los actores
 		player = new PlayerActor(playerTexture);
 		alien = new AlienActor(alienTexture);
+		alienShooter = new AlienShooterActor(alienShooterTexture);
 		laser = new LaserActor(laserTexture);
 		laserAlien = new LaserAlienActor(laserTexture);
 		player.setPosition(Constantes.ANCHO_PANTALLA/2, 100);
@@ -58,6 +61,7 @@ public class Scene2DScreen extends BaseScreen {
 		// se añaden al stage para que se vean
 		stage.addActor(player);
 		stage.addActor(alien);
+		stage.addActor(alienShooter);
 		stage.addActor(laser);
 		stage.addActor(laserAlien);
 	}
@@ -82,13 +86,6 @@ public class Scene2DScreen extends BaseScreen {
 		stage.act();
 
 		stage.draw();
-	}
-
-	/**
-	 * método para comprobar cuando chocan los objetos
-	 */
-	private void checkCollisions() {
-
 	}
 
 	/**

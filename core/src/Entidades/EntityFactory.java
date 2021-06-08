@@ -44,6 +44,18 @@ public class EntityFactory {
 	}
 
 	/**
+	 * Crea la entidad alienShooter
+	 * @param world     mundo
+	 * @param x  posición X inicial (metros)
+	 * @param y  posición Y inicial (metros)
+	 * @return alien.
+	 */
+	public AlienShooterEntity createAlienShooter(World world, float x, float y) {
+		Texture alienTexture = manager.get("alien2.png");
+		return new AlienShooterEntity(world, alienTexture, x, y);
+	}
+
+	/**
 	 * Crea la entidad laser de jugador
 	 * @param world     mundo
 	 * @param posicion vector con la posición de inicio del laser (en metros)

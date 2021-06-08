@@ -33,7 +33,7 @@ public class MainGame extends Game {
 		//los parámentros son primero el nombre del archivo y segundo el tipo de archivo
 		manager.load("defensor.png", Texture.class);
 		manager.load("alien1.png", Texture.class);
-		//manager.load("alien2.png", Texture.class);
+		manager.load("alien2.png", Texture.class);
 		manager.load("laser.png", Texture.class);
 		manager.load("laseralien.png", Texture.class);
 		manager.load("gameover.png", Texture.class);

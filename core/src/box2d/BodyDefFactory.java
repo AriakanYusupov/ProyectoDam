@@ -33,6 +33,17 @@ public class BodyDefFactory {
 	}
 
 	/**
+	 * método para los aliens
+	 * @return def
+	 */
+	public static BodyDef createAlienShooter() {
+		BodyDef def = new BodyDef();
+		def.position.set(0.5f, 0.25f);
+		def.type = BodyDef.BodyType.DynamicBody;
+		return def;
+	}
+
+	/**
 	 * método para los laser del jugador
 	 * @return def
 	 */

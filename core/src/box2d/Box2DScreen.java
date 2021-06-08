@@ -19,8 +19,8 @@ public class Box2DScreen extends BaseScreen {
 	private World world;
 	private Box2DDebugRenderer renderer;
 	private OrthographicCamera camera;
-	private Body playerBody, alienBody, laserPlayerBody, laserAlienBody;
-	private Fixture playerFixture, alienFixture, laserPlayerFixture, laserAlienFixture;
+	private Body playerBody, alienBody, alienShooterBody, laserPlayerBody, laserAlienBody;
+	private Fixture playerFixture, alienFixture, alienShooterFixture, laserPlayerFixture, laserAlienFixture;
 
 	public Box2DScreen(MainGame game){
 	super(game);
@@ -40,6 +40,7 @@ public class Box2DScreen extends BaseScreen {
 		//creamos los body
 		playerBody = world.createBody(BodyDefFactory.createPlayer());
 		alienBody = world.createBody(BodyDefFactory.createAlien());
+		alienShooterBody =  world.createBody(BodyDefFactory.createAlienShooter());
 		laserPlayerBody = world.createBody(BodyDefFactory.createLaserPlayer());
 		laserAlienBody = world.createBody(BodyDefFactory.createLaserAlien());
 
@@ -47,12 +48,14 @@ public class Box2DScreen extends BaseScreen {
 		//creamos las fixtures
 		playerFixture = FixtureFactory.createPlayerFixture(playerBody);
 		alienFixture = FixtureFactory.createAlienFixture(alienBody);
+		alienShooterFixture = FixtureFactory.createAlienFixture(alienShooterBody);
 		laserPlayerFixture = FixtureFactory.createLaserPlayerFixture(laserPlayerBody);
 		laserAlienFixture = FixtureFactory.createLaserAlienFixture(laserAlienBody);
 
 		// le damos nombre para poder manejar colisciones.
 		playerFixture.setUserData("player");
 		alienFixture.setUserData("alien");
+		alienShooterFixture.setUserData("alienShooter");
 		laserPlayerFixture.setUserData("laserPlayer");
 		laserAlienFixture.setUserData("laserAlien");
 
@@ -62,11 +65,13 @@ public class Box2DScreen extends BaseScreen {
 	public void dispose() {
 		playerBody.destroyFixture(playerFixture);
 		alienBody.destroyFixture(alienFixture);
+		alienShooterBody.destroyFixture(alienShooterFixture);
 		laserPlayerBody.destroyFixture(laserPlayerFixture);
 		laserAlienBody.destroyFixture(laserAlienFixture);
 
 		world.destroyBody(playerBody);
 		world.destroyBody(alienBody);
+		world.destroyBody(alienShooterBody);
 		world.destroyBody(laserPlayerBody);
 		world.destroyBody(laserAlienBody);
 

@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.ArrayList;
 
 import Entidades.AlienEntity;
+import Entidades.AlienShooterEntity;
 import Entidades.EntityFactory;
 import Entidades.LaserAlienEntity;
 import Entidades.LaserEntity;
@@ -51,12 +52,14 @@ import Entidades.PlayerEntity;
 
 		//Entidad Alien
 		private AlienEntity alien;
+		private AlienShooterEntity alienShooter;
 
 		//Entidad del laser
 		private LaserEntity laser;
 
 		//Lista de Aliens
 		private ArrayList<AlienEntity> listaAliens;
+		private ArrayList<AlienShooterEntity> listaAlienShooter;
 
 		//Listas de laser
 		private ArrayList<LaserEntity> listaLaser;
@@ -95,6 +98,7 @@ import Entidades.PlayerEntity;
 		//factory para poder crear los lasers
 		EntityFactory factory = new EntityFactory(game.getManager());
 
+		int numeroAlienShooters = 0;
 		private String usuario= null;
 
 		/**
@@ -163,7 +167,14 @@ import Entidades.PlayerEntity;
 				points = 0;
 			}
 
+			//calculamos el número de aliens que disparan
+
+			if (nivel == 4 || nivel>4 && (nivel-4) %3 ==0 ){
+				numeroAlienShooters +=1;
+			}
+
 			listaAliens = new ArrayList<>();
+			listaAlienShooter = new ArrayList<>();
 			listaLaserAlien= new ArrayList<>();
 			listaLaser = new ArrayList<>();
 
@@ -176,7 +187,7 @@ import Entidades.PlayerEntity;
 			player = factory.createPlayer(world, new Vector2(Constantes.ANCHO_PANTALLA/(Constantes.PIXEL_A_METRO*2), 1f));
 
 			//Crea aliens
-			for (int j= 0; j< MathUtils.random(3+nivel,6+nivel); j++){
+			for (int j= 0; j< MathUtils.random(3+nivel,6+nivel)-numeroAlienShooters; j++){
 				listaAliens.add(factory.createAlien(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
 					(Constantes.ALTO_PANTALLA*MathUtils.random(1f,1.6f)/(Constantes.PIXEL_A_METRO*2))));
 				listaAliens.get(j).setName(j);
@@ -190,6 +201,16 @@ import Entidades.PlayerEntity;
 				// se añaden los aliens a la escena
 				stage.addActor(listaAliens.get(j));
 			}
+
+			//creamos el segundo tipo de aliens, estos disparan
+			for (int j=0; j < numeroAlienShooters; j++){
+				listaAlienShooter.add(factory.createAlienShooter(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
+						(Constantes.ALTO_PANTALLA*MathUtils.random(1.7f,2f)/(Constantes.PIXEL_A_METRO*2))));
+				listaAlienShooter.get(j).setName(j);
+				System.out.println(Constantes.ALTO_PANTALLA*MathUtils.random(1.7f,1.9f)/(Constantes.PIXEL_A_METRO*2));
+				stage.addActor(listaAlienShooter.get(j));
+			}
+
 
 			stage.addActor(player);
 			stage.addActor(tablaPuntos);
@@ -217,6 +238,8 @@ import Entidades.PlayerEntity;
 			// Detach de las entidades
 			player.detach();
 			for (AlienEntity alien : listaAliens)
+				alien.detach();
+			for (AlienShooterEntity alien : listaAlienShooter)
 				alien.detach();
 			for (LaserEntity laser: listaLaser)
 				laser.detach();
@@ -256,7 +279,7 @@ import Entidades.PlayerEntity;
 				backgroundMusic.stop();
 				//paramos los aliens
 				stopAliens();
-
+				numeroAlienShooters = 0;
 				//pasamos los puntos para que se puedan guardar
 				if (FileManager.getUserData()!= null) {
 					FileManager.getUserData().setPuntosObtenidos(points);
@@ -347,11 +370,10 @@ import Entidades.PlayerEntity;
 	private void stopAliens(){
 			for (int i= 0; i < listaAliens.size();i++)
 			listaAliens.get(i).setStop(true);
+		for (int i= 0; i < listaAlienShooter.size();i++)
+			listaAlienShooter.get(i).setStop(true);
 		}
 
-	public static int getNivelStatic() {
-		return nivelStatic;
-	}
 
 	public static void setNivelStatic(int nivelStatic) {
 		GameScreen.nivelStatic = nivelStatic;
@@ -386,7 +408,7 @@ import Entidades.PlayerEntity;
 
 			@Override
 			public void beginContact(Contact contact) {
-				//colision de laser enviado por el jugador contra un alien
+				//colision de laser enviado por el jugador contra un alien normal
 				for (int i = 0; i < listaLaser.size(); i++){
 					listaLaser.get(i).setName(i);
 					for (int j = 0; j < listaAliens.size();j++){
@@ -406,14 +428,44 @@ import Entidades.PlayerEntity;
 							for (int x = 0; x < listaAliens.size(); x++) {
 								listaAliens.get(x).setName(x);
 							}
-							if (listaAliens.isEmpty()){
+							if (listaAliens.isEmpty() && listaAlienShooter.isEmpty()){
 								nuevaFase = true;
 							}
 							break;
 						}
 					}
 				}
-				//colisión de la nave del jugador con un alien
+				//colision de laser enviado por el jugador contra un alien shooter
+				for (int i = 0; i < listaLaser.size(); i++){
+					listaLaser.get(i).setName(i);
+					for (int j = 0; j < listaAlienShooter.size();j++){
+						if (hayContacto(contact, listaLaser.get(i).getName(), listaAlienShooter.get(j).getName())){
+							//muere el laser
+							listaLaser.get(i).setAlive(false);
+							listaLaser.get(i).cambiaGrupo();
+							listaLaser.get(i).remove();
+							//muere el alien y se quita de la lista
+							listaAlienShooter.get(j).setAlive(false);
+							listaAlienShooter.remove(j);
+							//efecto de sonido
+							expCorta.play();
+							//sumamos puntos
+							points+= 150;
+							//renombramos los aliens para que no de error por nulo
+							for (int x = 0; x < listaAlienShooter.size(); x++) {
+								listaAlienShooter.get(x).setName(x);
+							}
+							if (listaAliens.isEmpty() && listaAlienShooter.isEmpty()){
+								nuevaFase = true;
+							}
+							break;
+						}
+					}
+				}
+
+
+
+				//colisión de la nave del jugador con un alien normal
 				for (int i = 0; i < listaAliens.size();i++){
 					if(hayContacto(contact, "player", listaAliens.get(i).getName())) {
 						player.setAlive(false);
