@@ -35,6 +35,10 @@ public class AlienShooterEntity extends Actor{
 	//booleanos
 	private boolean alive, stop, direccion = false;
 
+	// temporizador
+	private float timer = 0;
+
+
 	//nombre del alien para poder revisar las colisiones
 	private String name = "alienShooter";
 
@@ -133,13 +137,11 @@ public class AlienShooterEntity extends Actor{
 	 */
 	private void moveAlien(float delta) {
 		//la dirección en que se mueven al principio se elige al azar
-		float timer =0;
 		int random = 0;
 		timer += delta;
-		if (timer >= 1) {
-			timer++;
-			random = MathUtils.random(0,2);
-			timer -= 1;
+		if (timer > 1f) {
+			random = MathUtils.random(0,3);
+			timer = timer - 1;
 		}
 
 		//se mueve a la derecha
@@ -149,7 +151,7 @@ public class AlienShooterEntity extends Actor{
 			if (body.getPosition().x * Constantes.PIXEL_A_METRO >= 960) {
 				direccion = !direccion;
 			}
-			if (random == 2){
+			if (random == 3){
 				direccion = !direccion;
 			}
 
@@ -161,7 +163,7 @@ public class AlienShooterEntity extends Actor{
 			if (body.getPosition().x * Constantes.PIXEL_A_METRO <= 0) {
 				direccion = !direccion;
 			}
-			if (random == 2){
+			if (random == 3){
 				direccion = !direccion;
 			}
 		}
@@ -207,8 +209,8 @@ public class AlienShooterEntity extends Actor{
 		this.stop = stop;
 	}
 
-	public void increaseAlienSpeed (){
-		body.setLinearVelocity(body.getLinearVelocity().x*1.2f, body.getLinearVelocity().y*1.1f);
+	public Vector2 getAlienPosition(){
+		return new Vector2(body.getPosition().x, body.getPosition().y);
 	}
 }
 

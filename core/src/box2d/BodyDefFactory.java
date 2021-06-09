@@ -60,7 +60,6 @@ public class BodyDefFactory {
 	 */
 	public static BodyDef createLaserAlien() {
 		BodyDef def = new BodyDef();
-		//def.position.set(x, y);
 		def.position.set(0,0);
 		def.type = BodyDef.BodyType.DynamicBody;
 		return def;

@@ -30,7 +30,7 @@ public class Scene2DScreen extends BaseScreen {
 	private LaserAlienActor laserAlien;
 
 	//texturas usadas en los elementos
-	private Texture playerTexture, alienTexture, alienShooterTexture, laserTexture;
+	private Texture playerTexture, alienTexture, alienShooterTexture, laserTexture, laserAlienTexture;
 
 	public Scene2DScreen (MainGame game){
 		super(game);
@@ -40,6 +40,7 @@ public class Scene2DScreen extends BaseScreen {
 		alienTexture = new Texture("alien1.png");
 		alienShooterTexture = new Texture("alien2.png");
 		laserTexture = new Texture("laser.png");
+		laserAlienTexture = new Texture("laseralien.png");
 	}
 
 	/**
@@ -55,7 +56,7 @@ public class Scene2DScreen extends BaseScreen {
 		alien = new AlienActor(alienTexture);
 		alienShooter = new AlienShooterActor(alienShooterTexture);
 		laser = new LaserActor(laserTexture);
-		laserAlien = new LaserAlienActor(laserTexture);
+		laserAlien = new LaserAlienActor(laserAlienTexture);
 		player.setPosition(Constantes.ANCHO_PANTALLA/2, 100);
 
 		// se añaden al stage para que se vean
@@ -96,6 +97,8 @@ public class Scene2DScreen extends BaseScreen {
 		playerTexture.dispose();
 		laserTexture.dispose();
 		alienTexture.dispose();
+		alienShooterTexture.dispose();
+		laserAlienTexture.dispose();
 
 		stage.dispose();
 	}

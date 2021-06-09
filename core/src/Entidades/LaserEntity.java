@@ -32,8 +32,6 @@ public class LaserEntity extends Actor {
 	//boolean para saber si el laser está vivo
 	private boolean alive;
 
-	//contador para eliminar el laser por tiempo
-	private float timer;
 	//nombre
 	private String name = "laser";
 
@@ -41,7 +39,7 @@ public class LaserEntity extends Actor {
 	public LaserEntity(World world, Texture texture, Vector2 posicion) {
 		this.world = world;
 		this.texture = texture;
-		timer = 0;
+
 		alive = true;
 
 		//Creación del cuerpo del laser
@@ -97,7 +95,7 @@ public class LaserEntity extends Actor {
 	 */
 	@Override
 	public void act(float delta) {
-		//se cuenta el tiempo de vida
+		//se cuenta la vida
 		if (isAlive()) {
 			vidaLaser();
 		}
@@ -118,7 +116,7 @@ public class LaserEntity extends Actor {
 	}
 
 	/**
-	 * método para que el laser desaparezca solo al cabe de un tiempo
+	 * método para que el laser desaparezca solo cuando sale de la pantalla
 	 */
 	public void vidaLaser(){
 		if (body.getPosition().y * Constantes.PIXEL_A_METRO > Constantes.ALTO_PANTALLA ){

@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.spacegame.Constantes;
+import com.spacegame.ConstantesFisicas;
 
 public class LaserAlienEntity extends Actor {
     //textura del laser
@@ -25,7 +27,7 @@ public class LaserAlienEntity extends Actor {
     private Fixture fixture;
 
     //boolean para saber si el laser está vivo
-    private boolean alive = true;
+    private boolean alive;
 
     private String name = "laserAlien";
 
@@ -33,6 +35,7 @@ public class LaserAlienEntity extends Actor {
         this.world = world;
         this.texture = texture;
 
+        alive = true;
         //Creación del cuerpo del laser
         //defición del body
         BodyDef def = new BodyDef();
@@ -42,7 +45,7 @@ public class LaserAlienEntity extends Actor {
         def.type = BodyDef.BodyType.DynamicBody;
         //creamos el body
         body = world.createBody(def);
-
+        body.setLinearVelocity(0,-4.5f);
         //Caja para las físicas
         //forma
         PolygonShape box = new PolygonShape();
@@ -52,12 +55,18 @@ public class LaserAlienEntity extends Actor {
         fixture = body.createFixture(box, 3);
         //nombre de la fixture para ser usada en maingame
         fixture.setUserData("laserAlien");
+        //filtro para evitar colisiones
+        Filter filter = new Filter();
+        filter.categoryBits = ConstantesFisicas.CAT_ALIEN;
+        filter.maskBits= ConstantesFisicas.MASK_ALIEN;
+        filter.groupIndex= -1;
+        fixture.setFilterData(filter);
         //se destruye la forma que ya no hace falta
         box.dispose();
 
         //se pone en un tamaño para que se vea, hay que usar la clase Constantes
         setSize(Constantes.PIXEL_A_METRO/3, Constantes.PIXEL_A_METRO/3 );
-        body.setLinearVelocity(0,-8);
+
 
     }
 
@@ -80,13 +89,29 @@ public class LaserAlienEntity extends Actor {
      */
     @Override
     public void act(float delta) {
+        //se cuenta la vida
+        if (isAlive()) {
+            vidaLaser();
+        }
+        //se elimina si no tiene que estar
+        if (!isAlive()){
+            remove();
+
+        }
     }
 
     public void detach() {
         body.destroyFixture(fixture);
         world.destroyBody(body);
     }
-
+    /**
+     * método para que el laser desaparezca solo al cabe de un tiempo
+     */
+    public void vidaLaser(){
+        if (body.getPosition().y * Constantes.PIXEL_A_METRO < 0 ){
+            alive = false;
+        }
+    }
     @Override
     public String getName() {
         return name;
@@ -94,6 +119,15 @@ public class LaserAlienEntity extends Actor {
     public void setName (Integer i) {
         name = name + i.toString();
         fixture.setUserData(name);
+    }
+
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
 }

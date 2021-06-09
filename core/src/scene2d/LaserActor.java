@@ -6,15 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class LaserActor extends Actor {
 
-
-
 	//textura de alien
 	private Texture laser;
 
 	//boolean para saber si está vivo
 	private boolean alive;
-
-	private float timer;
 
 	/**
 	 * constructor
@@ -24,7 +20,6 @@ public class LaserActor extends Actor {
 		this.laser = laser;
 		this.alive = true;
 		setSize(laser.getWidth(), laser.getHeight());
-		timer = 0;
 	}
 
 	@Override
@@ -38,13 +33,5 @@ public class LaserActor extends Actor {
 
 	public void setAlive(boolean alive) {
 		this.alive = alive;
-	}
-
-	public float getTimer() {
-		return timer;
-	}
-
-	public void setTimer(float timer) {
-		this.timer = timer;
 	}
 }
