@@ -20,7 +20,7 @@ public class MainGame extends Game {
 	/**
 	 * Pantallas del juego
 	 */
-	public BaseScreen loadingScreen, initScreen, logInScreen, menuScreen, gameScreen, gameOverScreen, scoreScreen, registroScreen;
+	public BaseScreen loadingScreen, initScreen, logInScreen, menuScreen, gameScreen, gameOverScreen, scoreScreen, registroScreen, opcionScreen;
 
 	/**
 	 * método para inicializar el controlador de recursos.

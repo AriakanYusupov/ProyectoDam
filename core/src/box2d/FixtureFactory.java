@@ -1,5 +1,6 @@
 package box2d;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -13,8 +14,13 @@ public class FixtureFactory {
 
 	//fixture de la nave del jugador
 	public static Fixture createPlayerFixture(Body playerBody) {
+		Vector2[] vertices = new Vector2[3];
+		vertices[0] = new Vector2(-0.5f, -0.5f);
+		vertices[1] = new Vector2(0.5f, -0.5f);
+		vertices[2] = new Vector2(0, 0.5f);
+
 		PolygonShape playerShape = new PolygonShape();
-		playerShape.setAsBox(0.5f, 0.5f);
+		playerShape.set(vertices);
 		Fixture fixture = playerBody.createFixture(playerShape, 3);
 		playerShape.dispose();
 		return fixture;

@@ -201,10 +201,10 @@ public class AlienShooterEntity extends Actor{
 		fixture.setUserData(name);
 	}
 
-	public boolean isStop() {
-		return stop;
-	}
-
+	/**
+	 * método para para los aliens
+	 * @param stop boolean
+	 */
 	public void setStop(boolean stop) {
 		this.stop = stop;
 	}

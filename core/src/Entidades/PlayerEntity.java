@@ -52,11 +52,14 @@ public class PlayerEntity extends Actor{
 
 		//Caja para las físicas
 		//forma
-		PolygonShape box = new PolygonShape();
-		//tamaño caja en metros
-		box.setAsBox(0.5f, 0.5f);
-		//crea la fixture
-		fixture = body.createFixture(box, 3);
+		Vector2[] vertices = new Vector2[3];
+		vertices[0] = new Vector2(-0.5f, -0.5f);
+		vertices[1] = new Vector2(0.5f, -0.5f);
+		vertices[2] = new Vector2(0, 0.5f);
+		//creamos al fixture
+		PolygonShape playerShape = new PolygonShape();
+		playerShape.set(vertices);
+		fixture = body.createFixture(playerShape, 3);
 		//nombre de la fixture para ser usada en maingame
 		fixture.setUserData("player");
 
@@ -66,7 +69,7 @@ public class PlayerEntity extends Actor{
 		filter.groupIndex = -2;
 		fixture.setFilterData(filter);
 		//se destruye la forma que ya no hace falta
-		box.dispose();
+		playerShape.dispose();
 
 		//se pone en un tamaño para que se vea, hay que usar la clase Constantes
 		setSize(Constantes.PIXEL_A_METRO, Constantes.PIXEL_A_METRO );

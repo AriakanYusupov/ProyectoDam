@@ -27,7 +27,11 @@ public class LaserAlienEntity extends Actor {
     private Fixture fixture;
 
     //boolean para saber si el laser está vivo
-    private boolean alive;
+    private boolean alive, stop;
+
+    //filtro para las colisiones
+    private Filter filter;
+
 
     private String name = "laserAlien";
 
@@ -36,6 +40,7 @@ public class LaserAlienEntity extends Actor {
         this.texture = texture;
 
         alive = true;
+        stop = false;
         //Creación del cuerpo del laser
         //defición del body
         BodyDef def = new BodyDef();
@@ -45,7 +50,7 @@ public class LaserAlienEntity extends Actor {
         def.type = BodyDef.BodyType.DynamicBody;
         //creamos el body
         body = world.createBody(def);
-        body.setLinearVelocity(0,-4.5f);
+        body.setLinearVelocity(0,-5.5f);
         //Caja para las físicas
         //forma
         PolygonShape box = new PolygonShape();
@@ -56,7 +61,7 @@ public class LaserAlienEntity extends Actor {
         //nombre de la fixture para ser usada en maingame
         fixture.setUserData("laserAlien");
         //filtro para evitar colisiones
-        Filter filter = new Filter();
+        filter = new Filter();
         filter.categoryBits = ConstantesFisicas.CAT_ALIEN;
         filter.maskBits= ConstantesFisicas.MASK_ALIEN;
         filter.groupIndex= -1;
@@ -72,8 +77,8 @@ public class LaserAlienEntity extends Actor {
 
     /**
      * método para pintar
-     * @param batch
-     * @param parentAlpha
+     * @param batch Batch
+     * @param parentAlpha trasparencia
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -93,10 +98,13 @@ public class LaserAlienEntity extends Actor {
         if (isAlive()) {
             vidaLaser();
         }
+        //para para al laser
+        if (stop){
+            body.setLinearVelocity(0,0);
+        }
         //se elimina si no tiene que estar
         if (!isAlive()){
             remove();
-
         }
     }
 
@@ -120,7 +128,21 @@ public class LaserAlienEntity extends Actor {
         name = name + i.toString();
         fixture.setUserData(name);
     }
-
+    /**
+     * método para que cuando un laser está muerto no pueda chocar con el jugador
+     * por si no fuese eliminado del juego de manera inmediata tras morir
+     */
+    public void cambiaGrupo(){
+        filter.groupIndex= -2;
+        fixture.setFilterData(filter);
+    }
+    /**
+     * método para para los lasers
+     * @param stop boolean
+     */
+    public void setStop(boolean stop){
+        this.stop= stop;
+    }
 
     public boolean isAlive() {
         return alive;

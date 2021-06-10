@@ -110,8 +110,9 @@ public class MenuScreen extends BaseScreen {
 	@Override
 	public void show() {
 		// volumen de la música y se activa
-		backgroundMusic.setVolume(1f);
-		backgroundMusic.play();
+			backgroundMusic.setVolume(0.75f);
+			backgroundMusic.play();
+
 		// hacemos que el Input Systen maneje el Stage.
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
 		Gdx.input.setInputProcessor(stage);

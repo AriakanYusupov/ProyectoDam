@@ -15,6 +15,7 @@ public class UserData implements Serializable {
 	private int[] nivelMax = new int[LISTA_PUNTOS];
 	private Date[] fechasPuntosMax = new Date[LISTA_PUNTOS];
 
+
 	/**
 	 * constructor
  	 * @param nombreUsuario String
@@ -129,4 +130,5 @@ public class UserData implements Serializable {
 	public String getNivel(Integer i){
 		return i.toString();
 	}
+
 }

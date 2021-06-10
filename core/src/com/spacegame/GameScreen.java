@@ -179,7 +179,6 @@ import Entidades.PlayerEntity;
 			listaLaserAlien= new ArrayList<>();
 			listaLaser = new ArrayList<>();
 
-			//stage.setDebugAll(true);
 			//cargamos el fondo lo primero para que salga detras
 			stage.addActor(fondo);
 
@@ -305,9 +304,6 @@ import Entidades.PlayerEntity;
 				//disparaAlienShooter(delta);
 				timer = timer + delta;
 				if (timer > 0.8f) {
-					System.out.println("shoot");
-					System.out.println("lista size "+listaLaserAlien.size());
-					System.out.println("numero max"+ (nivel-3));
 					if (listaLaserAlien.size()-1 < (nivel - 3)) {
 						if (listaAlienShooter.size() == 1) {
 							System.out.println("1");
@@ -315,7 +311,6 @@ import Entidades.PlayerEntity;
 							listaLaserAlien.add(factory.createLaserAlien(world, posicionLaser));
 							laserAlien.play();
 						} else {
-							System.out.println("mas de 1");
 							int random = MathUtils.random(0, listaAlienShooter.size() - 1);
 							Vector2 posicionLaser = new Vector2(listaAlienShooter.get(random).getAlienPosition());
 							listaLaserAlien.add(factory.createLaserAlien(world, posicionLaser));
@@ -358,6 +353,7 @@ import Entidades.PlayerEntity;
 						})
 				));
 			}
+
 			// actualiza el escenario a lo que necesitamos
 			stage.act();
 
@@ -408,40 +404,13 @@ import Entidades.PlayerEntity;
 		private void stopAliens(){
 			for (int i= 0; i < listaAliens.size();i++)
 				listaAliens.get(i).setStop(true);
+			if (!listaAlienShooter.isEmpty()){
 			for (int i= 0; i < listaAlienShooter.size();i++)
-				listaAlienShooter.get(i).setStop(true);
+				listaAlienShooter.get(i).setStop(true);}
+			if (!listaLaserAlien.isEmpty()){
+			for (int i= 0; i < listaLaserAlien.size();i++)
+				listaLaserAlien.get(i).setStop(true);}
 		}
-
-		/**
-		 * método para que disparen los aliens
-		 * @param delta tiempo
-		 */
-		private void disparaAlienShooter(float delta){
-			timer = timer + delta;
-			if (timer > 0.8f) {
-				System.out.println("shoot");
-				System.out.println("lista size "+listaLaserAlien.size());
-				System.out.println("numero max"+ (nivel-3));
-				if (listaLaserAlien.size()-1 < (nivel - 3)) {
-					int random = MathUtils.random(0, listaAlienShooter.size()-1);
-					Vector2 posicionLaser = new Vector2(listaAlienShooter.get(random).getX(), listaAlienShooter.get(random).getY());
-					listaLaserAlien.add(factory.createLaserAlien(world, posicionLaser));
-					laserAlien.play();
-				}
-			//comprobamos si deben desaparecer
-				for (int i = 0; i < listaLaserAlien.size(); i++) {
-					stage.addActor(listaLaserAlien.get(i));
-					listaLaserAlien.get(i).vidaLaser();
-					//se quitan de la lista para que se puedan disparar más
-					if (listaLaserAlien.get(i) != null && !listaLaserAlien.get(i).isAlive()) {
-						listaLaserAlien.remove(i);
-						i--;
-					}
-				}
-				timer =- 0.8f;
-			}
-	}
-
 
 	public static void setNivelStatic(int nivelStatic) {
 		GameScreen.nivelStatic = nivelStatic;
@@ -536,13 +505,18 @@ import Entidades.PlayerEntity;
 						for (int j = 0; j < listaLaserAlien.size();j++){
 							if (hayContacto(contact, listaLaser.get(i).getName(), listaLaserAlien.get(j).getName())){
 								//muere los lasers
+								listaLaserAlien.get(j).setAlive(false);
+								listaLaserAlien.remove(j);
+								listaLaserAlien.get(j).cambiaGrupo();
 								listaLaser.get(i).setAlive(false);
 								listaLaser.get(i).cambiaGrupo();
 								listaLaser.get(i).remove();
-								listaLaserAlien.get(j).setAlive(false);
-								listaLaserAlien.remove(j);
 								//efecto de sonido
 								expCorta.play();
+								//renombramos los lasers para que no de error por nulo
+								for (int x = 0; x < listaLaserAlien.size(); x++) {
+									listaLaserAlien.get(x).setName(x);
+								}
 								//sumamos puntos
 								points+= 10;
 
