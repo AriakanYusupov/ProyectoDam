@@ -1,7 +1,7 @@
 Entidades/PlayerEntity.java
  Entidades.PlayerEntity
-Entidades/EntityFactory.java
- Entidades.EntityFactory
+com/spacegame/BaseScreen.java
+ com.spacegame.BaseScreen
 Entidades/LaserEntity.java
  Entidades.LaserEntity
 box2d/Box2DScreen.java
@@ -40,8 +40,11 @@ com/spacegame/MenuScreen.java
  com.spacegame.MenuScreen$1
  com.spacegame.MenuScreen$2
  com.spacegame.MenuScreen$3
-Entidades/LaserAlienEntity.java
- Entidades.LaserAlienEntity
+com/spacegame/RegistroScreen.java
+ com.spacegame.RegistroScreen
+ com.spacegame.RegistroScreen$1
+ com.spacegame.RegistroScreen$2
+ com.spacegame.RegistroScreen$3
 com/spacegame/ConstantesFisicas.java
  com.spacegame.ConstantesFisicas
 scene2d/AlienActor.java
@@ -55,13 +58,10 @@ scene2d/AlienShooterActor.java
  scene2d.AlienShooterActor
 com/spacegame/UserData.java
  com.spacegame.UserData
-com/spacegame/RegistroScreen.java
- com.spacegame.RegistroScreen
- com.spacegame.RegistroScreen$1
- com.spacegame.RegistroScreen$2
- com.spacegame.RegistroScreen$3
-com/spacegame/BaseScreen.java
- com.spacegame.BaseScreen
+Entidades/LaserAlienEntity.java
+ Entidades.LaserAlienEntity
+Entidades/EntityFactory.java
+ Entidades.EntityFactory
 com/spacegame/GameScreen.java
  com.spacegame.GameScreen
  com.spacegame.GameScreen$1
