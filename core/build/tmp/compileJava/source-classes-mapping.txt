@@ -42,20 +42,22 @@ com/spacegame/MenuScreen.java
  com.spacegame.MenuScreen$2
  com.spacegame.MenuScreen$3
  com.spacegame.MenuScreen$4
-com/spacegame/GameScreen.java
- com.spacegame.GameScreen
- com.spacegame.GameScreen$1
- com.spacegame.GameScreen$2
- com.spacegame.GameScreen$GameContactListener
+com/spacegame/CambioScreen.java
+ com.spacegame.CambioScreen
+ com.spacegame.CambioScreen$1
+ com.spacegame.CambioScreen$2
+ com.spacegame.CambioScreen$3
 box2d/Box2DScreen.java
  box2d.Box2DScreen
 com/spacegame/ScoreScreen.java
  com.spacegame.ScoreScreen
  com.spacegame.ScoreScreen$1
-com/spacegame/GameOverScreen.java
- com.spacegame.GameOverScreen
- com.spacegame.GameOverScreen$1
- com.spacegame.GameOverScreen$2
+com/spacegame/OptionScreen.java
+ com.spacegame.OptionScreen
+ com.spacegame.OptionScreen$1
+ com.spacegame.OptionScreen$2
+ com.spacegame.OptionScreen$3
+ com.spacegame.OptionScreen$4
 com/spacegame/InitScreen.java
  com.spacegame.InitScreen
 com/spacegame/LoadingScreen.java
@@ -72,16 +74,14 @@ com/spacegame/RegistroScreen.java
  com.spacegame.RegistroScreen$1
  com.spacegame.RegistroScreen$2
  com.spacegame.RegistroScreen$3
-com/spacegame/OptionScreen.java
- com.spacegame.OptionScreen
- com.spacegame.OptionScreen$1
- com.spacegame.OptionScreen$2
- com.spacegame.OptionScreen$3
- com.spacegame.OptionScreen$4
-com/spacegame/CambioScreen.java
- com.spacegame.CambioScreen
- com.spacegame.CambioScreen$1
- com.spacegame.CambioScreen$2
- com.spacegame.CambioScreen$3
+com/spacegame/GameScreen.java
+ com.spacegame.GameScreen
+ com.spacegame.GameScreen$1
+ com.spacegame.GameScreen$2
+ com.spacegame.GameScreen$GameContactListener
 com/spacegame/MainGame.java
  com.spacegame.MainGame
+com/spacegame/GameOverScreen.java
+ com.spacegame.GameOverScreen
+ com.spacegame.GameOverScreen$1
+ com.spacegame.GameOverScreen$2

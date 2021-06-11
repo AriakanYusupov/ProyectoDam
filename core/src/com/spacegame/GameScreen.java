@@ -69,7 +69,7 @@ import Entidades.PlayerEntity;
 		private Vector3 position;
 
 		//imagen del fondo
-		private Image fondo;
+		private Image fondo, fondo2;
 
 		// Musica de fondo
 		private final Music backgroundMusic;
@@ -87,20 +87,19 @@ import Entidades.PlayerEntity;
 		private final Table tablaNivel = new Table();
 
 		//labels
-		private Label labelPuntos, labelNivel, puntos, nivelTexto;
+		private final Label labelPuntos, labelNivel, puntos, nivelTexto;
 		//puntos y vidas
 		private Integer points= 0, nivel = 0;
 		private static int nivelStatic= 0;
 
 		//booleano para cambiar de fase
-		private boolean nuevaFase;
+		private boolean nuevaFase, otrofondo;
 
 		//factory para poder crear los lasers
 		EntityFactory factory = new EntityFactory(game.getManager());
 
 		private int numeroAlienShooters = 0;
 		private float timer = 0;
-		private String usuario= null;
 
 		/**
 		 * Crea la pantalla.
@@ -108,9 +107,7 @@ import Entidades.PlayerEntity;
 		 */
 		public GameScreen(MainGame game) {
 			super(game);
-			if (FileManager.getUserData()!= null){
-				usuario = FileManager.getUserData().getNombreUsuario();
-				}
+
 			// nuevo escenario
 			stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
 
@@ -148,10 +145,12 @@ import Entidades.PlayerEntity;
 			tablaNivel.setSize(100,8);
 
 			nuevaFase = false;
+			otrofondo = false;
 
 			//carga del fondo
 			fondo = new Image(game.getManager().get("fondo.png", Texture.class));
-			}
+			fondo2 = new Image(game.getManager().get("fondo2.png", Texture.class));
+		}
 
 
 
@@ -189,7 +188,20 @@ import Entidades.PlayerEntity;
 			listaLaser = new ArrayList<>();
 
 			//cargamos el fondo lo primero para que salga detras
-			stage.addActor(fondo);
+			//alteran según nivel
+
+			if (nivel > 1 && nivel%5 == 0) {
+				otrofondo = !otrofondo;
+			}
+			if (otrofondo) {
+				stage.addActor(fondo2);
+				fondo.remove();
+			}else {
+				stage.addActor(fondo);
+				fondo2.remove();
+			}
+
+
 
 			// Crea al jugador y lo pone en su posición inicial
 			//como la escena está en metros hay que calcular el valor central de la pantalla usando la constante de conversión
@@ -317,17 +329,14 @@ import Entidades.PlayerEntity;
 							//posicion del laser depende del alien que dispara
 							Vector2 posicionLaser = new Vector2(listaAlienShooter.get(0).getAlienPosition());
 							listaLaserAlien.add(factory.createLaserAlien(world, posicionLaser));
-							if (FileManager.getUserData().isSonido()) {
-								laserAlien.play();
-							}
 						} else {
 							//si hay más de un alien se elige al azar
 							int random = MathUtils.random(0, listaAlienShooter.size() - 1);
 							Vector2 posicionLaser = new Vector2(listaAlienShooter.get(random).getAlienPosition());
 							listaLaserAlien.add(factory.createLaserAlien(world, posicionLaser));
-							if (FileManager.getUserData().isSonido()) {
-								laserAlien.play();
-							}
+						}
+						if (FileManager.getUserData().isSonido()) {
+							laserAlien.play();
 						}
 					}
 					//comprobamos si deben desaparecer
