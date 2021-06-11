@@ -35,7 +35,7 @@ public class LoadingScreen extends BaseScreen {
 
 		// se generan el stage y la skin.
 		stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
 		// texto usando la skin
 		loading = new Label("Cargando...", skin);

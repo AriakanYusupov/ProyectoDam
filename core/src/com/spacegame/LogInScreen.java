@@ -42,7 +42,7 @@ public class LogInScreen extends BaseScreen {
 		// nuevo escenario
 		stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
 		// cargamos el fichero con la skin
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
 		//tabla para recoger los botones
 		Table tabla = new Table();

@@ -46,7 +46,7 @@ public class OptionScreen extends BaseScreen {
 		stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
 
 		// cargamos el fichero con la skin
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
 		//cargamos el fondo al principio
 		fondo = new Image(game.getManager().get("fondo2.png", Texture.class));

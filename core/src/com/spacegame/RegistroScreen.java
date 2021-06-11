@@ -42,7 +42,7 @@ public class RegistroScreen extends BaseScreen {
 		// nuevo escenario
 		stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
 		// cargamos el fichero con la skin
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
 		//creamos el boton. el primer parametro es el texto a mostrar, el segundo la skin a usar
 		salvar = new TextButton("Salvar", skin);

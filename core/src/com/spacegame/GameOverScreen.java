@@ -49,7 +49,7 @@ public class GameOverScreen extends BaseScreen{
 
 		// nuevo escenario y skin
 		stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
 		//tabla para recoger los botones
 		Table tabla = new Table();

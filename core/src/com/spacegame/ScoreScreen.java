@@ -55,7 +55,7 @@ public class ScoreScreen extends BaseScreen{
 		// nuevo escenario
 		stage = new Stage(new FitViewport(Constantes.ANCHO_PANTALLA,Constantes.ALTO_PANTALLA));
 		// cargamos el fichero con la skin
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 		fondo = new Image(game.getManager().get("fondo2.png", Texture.class));
 		fondo.setBounds(0,0,Constantes.ANCHO_PANTALLA, Constantes.ALTO_PANTALLA);
 		titulo = new Image(game.getManager().get("highscores.png", Texture.class));
@@ -125,8 +125,12 @@ public class ScoreScreen extends BaseScreen{
 		stage.addActor(tabla);
 
 		// volumen de la música y se activa
-		backgroundMusic.setVolume(1f);
-		backgroundMusic.play();
+		if (FileManager.getUserData().isMusica()) {
+			backgroundMusic.setVolume(0.75f);
+			backgroundMusic.play();
+		} else {
+			backgroundMusic.stop();
+		}
 		// hacemos que el Input Systen maneje el Stage.
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
 		Gdx.input.setInputProcessor(stage);

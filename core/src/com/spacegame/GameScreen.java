@@ -116,7 +116,7 @@ import Entidades.PlayerEntity;
 			world.setContactListener(new GameContactListener());
 
 			// cargamos el fichero con la skin
-			skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+			skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
 			// carga de sonidos.
 			expCorta = game.getManager().get("sound/Explosion_Corta.ogg");
