@@ -135,7 +135,7 @@ public class PlayerEntity extends Actor{
 	/**
 	 * método para detener el movimiento de la nave
 	 */
-	private void stopPlayer() {
+	public void stopPlayer() {
 		body.setLinearVelocity(0,0);
 
 	}

@@ -28,7 +28,7 @@ public class MenuScreen extends BaseScreen {
 	private Image logo, fondo;
 
 	//botones
-	private TextButton jugar, puntuacion, salir;
+	private TextButton jugar, puntuacion, salir, opcion;
 
 	// Musica de fondo
 	private Music backgroundMusic;
@@ -56,13 +56,16 @@ public class MenuScreen extends BaseScreen {
 		jugar = new TextButton("Jugar", skin);
 		puntuacion = new TextButton("Mejores Puntuaciones", skin);
 		salir = new TextButton("Salir", skin);
+		opcion = new TextButton("Opciones", skin);
 		backgroundMusic = game.getManager().get("music/Punky.mp3");
 
-		tabla.add(jugar).size(300,80).pad(10);
+		tabla.add(jugar).size(300,60).pad(10);
 		tabla.row();
-		tabla.add(puntuacion).size(300,80).pad(10);
+		tabla.add(puntuacion).size(300,60).pad(10);
 		tabla.row();
-		tabla.add(salir).size(300,80).pad(10);
+		tabla.add(opcion).size(300, 60).pad(10);
+		tabla.row();
+		tabla.add(salir).size(300,60).pad(10);
 
 
 		// si hay que cargar una imagen, se hace así
@@ -83,7 +86,6 @@ public class MenuScreen extends BaseScreen {
 				game.setScreen(game.gameScreen);
 			}
 		});
-
 		puntuacion.addCaptureListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -91,7 +93,13 @@ public class MenuScreen extends BaseScreen {
 				game.setScreen(game.scoreScreen);
 			}
 		});
-
+		opcion.addCaptureListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				//lleva a la pantalla de opciones
+				game.setScreen(game.opcionScreen);
+			}
+		});
 		salir.addCaptureListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -110,9 +118,12 @@ public class MenuScreen extends BaseScreen {
 	@Override
 	public void show() {
 		// volumen de la música y se activa
+		if (FileManager.getUserData().isMusica()) {
 			backgroundMusic.setVolume(0.75f);
 			backgroundMusic.play();
-
+		} else {
+			backgroundMusic.stop();
+		}
 		// hacemos que el Input Systen maneje el Stage.
 		// Stages son procesadores de Inputs, por lo que pueden manejar los botones
 		Gdx.input.setInputProcessor(stage);

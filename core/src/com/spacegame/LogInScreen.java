@@ -60,10 +60,10 @@ public class LogInScreen extends BaseScreen {
 
 		//creamos los textFields
 		usuarioNombre = new TextField("Usuario", skin);
-		usuarioNombre.setMaxLength(15);
+		usuarioNombre.setMaxLength(30);
 
 		password = new TextField("Password", skin);
-		password.setMaxLength(12);
+		password.setMaxLength(30);
 
 		//se añaden los elementos a la tabla
 		tabla.add(usuarioNombre).size(300,80).pad(10);
@@ -109,6 +109,10 @@ public class LogInScreen extends BaseScreen {
 		registrar.addCaptureListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				usuarioNombre.setText("Usuario");
+				password.setText("Password");
+				password.setPasswordMode(false);
+				stage.unfocusAll();
 				//lleva a la pantalla de juego
 				game.setScreen(game.registroScreen);
 			}

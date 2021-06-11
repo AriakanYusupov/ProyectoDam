@@ -189,6 +189,36 @@ public class FileManager {
 		return result;
 	}
 
+	/**
+	 * recupera la contraseña según el nombre
+	 * @param name String nombre user
+	 * @return String con el password
+	 */
+	public static String getPassWord(String name) {
+		String pass = null;
+		int indice = -1;
+		for (int i = 0; i < userList.getName().size(); i++){
+			if (name.equals(userList.getName().get(i))){
+				indice = i;
+			}
+			if (indice >= 0) {
+				pass = (userList.getPasswords().get(indice));
+			}
+		}
+		return pass;
+	}
+
+	public static void setPassWord (String name, String pass){
+		int indice = -1;
+		for (int i = 0; i < userList.getName().size(); i++){
+			if (name.equals(userList.getName().get(i))){
+				indice = i;
+			}
+			if (indice >= 0) {
+			 userList.getPasswords().set(indice, pass);
+			}
+		}
+	}
 
 	public static UserData getUserData() {
 		return userData;

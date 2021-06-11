@@ -50,13 +50,13 @@ public class RegistroScreen extends BaseScreen {
 
 		//creamos los textFields
 		usuario= new TextField("Usuario", skin);
-		usuario.setMaxLength(15);
+		usuario.setMaxLength(30);
 
 		password1 = new TextField("Password", skin);
-		password1.setMaxLength(12);
+		password1.setMaxLength(30);
 
 		password2 = new TextField("Repetir Password", skin);
-		password2.setMaxLength(12);
+		password2.setMaxLength(30);
 
 		//boton para quitar focus a los demás actores
 		ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
@@ -111,6 +111,12 @@ public class RegistroScreen extends BaseScreen {
 		volver.addCaptureListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				usuario.setText("Usuario");
+				password1.setText("Password");
+				password1.setPasswordMode(false);
+				password2.setText("Repetir Password");
+				password2.setPasswordMode(false);
+				stage.unfocusAll();
 				//lleva a la pantalla de juego
 				game.setScreen(game.logInScreen);
 			}

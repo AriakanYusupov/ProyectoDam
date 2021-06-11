@@ -15,6 +15,8 @@ public class UserData implements Serializable {
 	private int[] nivelMax = new int[LISTA_PUNTOS];
 	private Date[] fechasPuntosMax = new Date[LISTA_PUNTOS];
 
+	private boolean musica, sonido;
+
 
 	/**
 	 * constructor
@@ -33,6 +35,8 @@ public class UserData implements Serializable {
 			nivelMax[i] = 0;
 			Date fechainit = new Date(0L);
 			fechasPuntosMax[i] = fechainit;
+			musica = true;
+			sonido = true;
 
 		}
 	}
@@ -131,4 +135,19 @@ public class UserData implements Serializable {
 		return i.toString();
 	}
 
+	public boolean isMusica() {
+		return musica;
+	}
+
+	public void setMusica(boolean musica) {
+		this.musica = musica;
+	}
+
+	public boolean isSonido() {
+		return sonido;
+	}
+
+	public void setSonido(boolean sonido) {
+		this.sonido = sonido;
+	}
 }

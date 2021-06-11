@@ -1,28 +1,27 @@
+com/spacegame/UserData.java
+ com.spacegame.UserData
 Entidades/PlayerEntity.java
  Entidades.PlayerEntity
-com/spacegame/BaseScreen.java
- com.spacegame.BaseScreen
 Entidades/LaserEntity.java
  Entidades.LaserEntity
-box2d/Box2DScreen.java
- box2d.Box2DScreen
-com/spacegame/ScoreScreen.java
- com.spacegame.ScoreScreen
- com.spacegame.ScoreScreen$1
-scene2d/LaserAlienActor.java
- scene2d.LaserAlienActor
+scene2d/AlienShooterActor.java
+ scene2d.AlienShooterActor
+com/spacegame/ConstantesFisicas.java
+ com.spacegame.ConstantesFisicas
+scene2d/AlienActor.java
+ scene2d.AlienActor
 Entidades/AlienShooterEntity.java
  Entidades.AlienShooterEntity
 box2d/BodyDefFactory.java
  box2d.BodyDefFactory
-com/spacegame/InitScreen.java
- com.spacegame.InitScreen
+Entidades/LaserAlienEntity.java
+ Entidades.LaserAlienEntity
 com/spacegame/UserList.java
  com.spacegame.UserList
 Entidades/AlienEntity.java
  Entidades.AlienEntity
-com/spacegame/LoadingScreen.java
- com.spacegame.LoadingScreen
+com/spacegame/FileManager.java
+ com.spacegame.FileManager
 scene2d/LaserActor.java
  scene2d.LaserActor
 scene2d/PlayerActor.java
@@ -31,45 +30,58 @@ com/spacegame/Constantes.java
  com.spacegame.Constantes
 box2d/FixtureFactory.java
  box2d.FixtureFactory
+scene2d/LaserAlienActor.java
+ scene2d.LaserAlienActor
+Entidades/EntityFactory.java
+ Entidades.EntityFactory
 scene2d/Scene2DScreen.java
  scene2d.Scene2DScreen
-com/spacegame/FileManager.java
- com.spacegame.FileManager
 com/spacegame/MenuScreen.java
  com.spacegame.MenuScreen
  com.spacegame.MenuScreen$1
  com.spacegame.MenuScreen$2
  com.spacegame.MenuScreen$3
-com/spacegame/RegistroScreen.java
- com.spacegame.RegistroScreen
- com.spacegame.RegistroScreen$1
- com.spacegame.RegistroScreen$2
- com.spacegame.RegistroScreen$3
-com/spacegame/ConstantesFisicas.java
- com.spacegame.ConstantesFisicas
-scene2d/AlienActor.java
- scene2d.AlienActor
-com/spacegame/LogInScreen.java
- com.spacegame.LogInScreen
- com.spacegame.LogInScreen$1
- com.spacegame.LogInScreen$2
- com.spacegame.LogInScreen$3
-scene2d/AlienShooterActor.java
- scene2d.AlienShooterActor
-com/spacegame/UserData.java
- com.spacegame.UserData
-Entidades/LaserAlienEntity.java
- Entidades.LaserAlienEntity
-Entidades/EntityFactory.java
- Entidades.EntityFactory
+ com.spacegame.MenuScreen$4
 com/spacegame/GameScreen.java
  com.spacegame.GameScreen
  com.spacegame.GameScreen$1
  com.spacegame.GameScreen$2
  com.spacegame.GameScreen$GameContactListener
-com/spacegame/MainGame.java
- com.spacegame.MainGame
+box2d/Box2DScreen.java
+ box2d.Box2DScreen
+com/spacegame/ScoreScreen.java
+ com.spacegame.ScoreScreen
+ com.spacegame.ScoreScreen$1
 com/spacegame/GameOverScreen.java
  com.spacegame.GameOverScreen
  com.spacegame.GameOverScreen$1
  com.spacegame.GameOverScreen$2
+com/spacegame/InitScreen.java
+ com.spacegame.InitScreen
+com/spacegame/LoadingScreen.java
+ com.spacegame.LoadingScreen
+com/spacegame/LogInScreen.java
+ com.spacegame.LogInScreen
+ com.spacegame.LogInScreen$1
+ com.spacegame.LogInScreen$2
+ com.spacegame.LogInScreen$3
+com/spacegame/BaseScreen.java
+ com.spacegame.BaseScreen
+com/spacegame/RegistroScreen.java
+ com.spacegame.RegistroScreen
+ com.spacegame.RegistroScreen$1
+ com.spacegame.RegistroScreen$2
+ com.spacegame.RegistroScreen$3
+com/spacegame/OptionScreen.java
+ com.spacegame.OptionScreen
+ com.spacegame.OptionScreen$1
+ com.spacegame.OptionScreen$2
+ com.spacegame.OptionScreen$3
+ com.spacegame.OptionScreen$4
+com/spacegame/CambioScreen.java
+ com.spacegame.CambioScreen
+ com.spacegame.CambioScreen$1
+ com.spacegame.CambioScreen$2
+ com.spacegame.CambioScreen$3
+com/spacegame/MainGame.java
+ com.spacegame.MainGame

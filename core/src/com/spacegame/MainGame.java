@@ -20,7 +20,7 @@ public class MainGame extends Game {
 	/**
 	 * Pantallas del juego
 	 */
-	public BaseScreen loadingScreen, initScreen, logInScreen, menuScreen, gameScreen, gameOverScreen, scoreScreen, registroScreen, opcionScreen;
+	public BaseScreen loadingScreen, initScreen, logInScreen, menuScreen, gameScreen, gameOverScreen, scoreScreen, registroScreen, opcionScreen, cambioScreen;
 
 	/**
 	 * método para inicializar el controlador de recursos.
@@ -70,6 +70,8 @@ public class MainGame extends Game {
 		gameOverScreen = new GameOverScreen(this);
 		scoreScreen = new ScoreScreen(this);
 		registroScreen = new RegistroScreen(this);
+		opcionScreen = new OptionScreen(this);
+		cambioScreen = new CambioScreen(this);
 
 		setScreen(initScreen);
 	}

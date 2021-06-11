@@ -42,7 +42,7 @@ public class GameOverScreen extends BaseScreen{
 
 	/**
 	 * Crea la pantalla.
-	 * @param game
+	 * @param game juego
 	 */
 	public GameOverScreen(final MainGame game) {
 		super(game);
@@ -95,7 +95,8 @@ public class GameOverScreen extends BaseScreen{
 	@Override
 	public void show() {
 
-		lose.play();
+		if (FileManager.getUserData().isSonido()){
+		lose.play();}
 
 		if (FileManager.getUserData()!= null) {
 			FileManager.getUserData().cambiarListaPuntos(FileManager.getUserData().getPuntosObtenidos(), FileManager.getUserData().getNivelAlcanzado());

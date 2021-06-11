@@ -162,6 +162,15 @@ import Entidades.PlayerEntity;
 		@Override
 		public void show() {
 
+			// volumen de la música y se activa si el usuario asi lo quiere
+			if (FileManager.getUserData().isMusica()) {
+				backgroundMusic.setVolume(0.75f);
+				backgroundMusic.play();
+			} else {
+				backgroundMusic.stop();
+			}
+
+
 			nivel = nivelStatic;
 			//reseteamos los puntos
 			if (nivel == 0){
@@ -169,7 +178,7 @@ import Entidades.PlayerEntity;
 			}
 
 			//calculamos el número de aliens que disparan
-
+			//salen a partir del cuarto nivel y se añade uno cada 3 niveles
 			if (nivel == 4 || nivel>4 && (nivel-4) %3 ==0 ){
 				numeroAlienShooters +=1;
 			}
@@ -187,6 +196,7 @@ import Entidades.PlayerEntity;
 			player = factory.createPlayer(world, new Vector2(Constantes.ANCHO_PANTALLA/(Constantes.PIXEL_A_METRO*2), 1f));
 
 			//Crea aliens
+			//el número de aliens aumenta cada nivel, pero el maximo depende de los aliens que disparan.
 			for (int j= 0; j< MathUtils.random(3+nivel,6+nivel)-numeroAlienShooters; j++){
 				listaAliens.add(factory.createAlien(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
 					(Constantes.ALTO_PANTALLA*MathUtils.random(1f,1.6f)/(Constantes.PIXEL_A_METRO*2))));
@@ -195,6 +205,7 @@ import Entidades.PlayerEntity;
 				if (nivel > 0 && nivel % 3== 0) {
 					listaAliens.get(j).increaseAlienSpeed();
 				}
+				//cada 2 niveles se sube un poco la altura a la que aparecen para que haya más diversidad y sea más facil
 				if (nivel >0 && nivel % 2 == 0){
 					listaAliens.get(j).setPosition(listaAliens.get(j).getX(), (listaAliens.get(j).getY())*1.2f);
 				}
@@ -207,7 +218,7 @@ import Entidades.PlayerEntity;
 				listaAlienShooter.add(factory.createAlienShooter(world,(Constantes.ANCHO_PANTALLA* MathUtils.random(0.5f,1.5f)/(Constantes.PIXEL_A_METRO*2)),
 						(Constantes.ALTO_PANTALLA*MathUtils.random(1.7f,2f)/(Constantes.PIXEL_A_METRO*2))));
 				listaAlienShooter.get(j).setName(j);
-				System.out.println(Constantes.ALTO_PANTALLA*MathUtils.random(1.7f,1.9f)/(Constantes.PIXEL_A_METRO*2));
+				//se añaden a la escena
 				stage.addActor(listaAlienShooter.get(j));
 			}
 
@@ -219,10 +230,6 @@ import Entidades.PlayerEntity;
 			//se coloca la camara
 			stage.getCamera().position.set(Constantes.ANCHO_PANTALLA/2, Constantes.ALTO_PANTALLA/2,0);
 			stage.getCamera().update();
-
-			// volumen de la música y se activa
-			backgroundMusic.setVolume(0.5f);
-			backgroundMusic.play();
 
 		}
 
@@ -264,6 +271,7 @@ import Entidades.PlayerEntity;
 			if (Gdx.input.isKeyJustPressed(62)){
 				disparalaser();
 			}
+			//para disparar se tiene en cuenta la segunda pulsación en los androids
 			if (Gdx.input.isTouched(1) ){
 				if (Gdx.input.justTouched()){
 					disparalaser();
@@ -276,6 +284,7 @@ import Entidades.PlayerEntity;
 			}
 			//el jugador muere, se va a GAME OVER
 			if (!player.isAlive()){
+				//se para la música si mueres
 				backgroundMusic.stop();
 				//paramos los aliens
 				stopAliens();
@@ -301,20 +310,24 @@ import Entidades.PlayerEntity;
 
 			//disparos de los aliens
 			if(!listaAlienShooter.isEmpty()){
-				//disparaAlienShooter(delta);
 				timer = timer + delta;
 				if (timer > 0.8f) {
 					if (listaLaserAlien.size()-1 < (nivel - 3)) {
 						if (listaAlienShooter.size() == 1) {
-							System.out.println("1");
+							//posicion del laser depende del alien que dispara
 							Vector2 posicionLaser = new Vector2(listaAlienShooter.get(0).getAlienPosition());
 							listaLaserAlien.add(factory.createLaserAlien(world, posicionLaser));
-							laserAlien.play();
+							if (FileManager.getUserData().isSonido()) {
+								laserAlien.play();
+							}
 						} else {
+							//si hay más de un alien se elige al azar
 							int random = MathUtils.random(0, listaAlienShooter.size() - 1);
 							Vector2 posicionLaser = new Vector2(listaAlienShooter.get(random).getAlienPosition());
 							listaLaserAlien.add(factory.createLaserAlien(world, posicionLaser));
-							laserAlien.play();
+							if (FileManager.getUserData().isSonido()) {
+								laserAlien.play();
+							}
 						}
 					}
 					//comprobamos si deben desaparecer
@@ -335,7 +348,9 @@ import Entidades.PlayerEntity;
 			//cambio de nivel
 			if (player.isAlive() && nuevaFase){
 				backgroundMusic.pause();
-				nuevoNivel.play();
+				if (FileManager.getUserData().isSonido()) {
+					nuevoNivel.play();
+				}
 				nuevaFase = false;
 
 				//cada nivel sube la posibilidad de más enemigos en la pantalla
@@ -348,7 +363,9 @@ import Entidades.PlayerEntity;
 							public void run() {
 								//cambiamos de pantalla
 								game.setScreen(game.gameScreen);
-								backgroundMusic.play();
+								if (FileManager.getUserData().isMusica()) {
+									backgroundMusic.play();
+								}
 							}
 						})
 				));
@@ -385,7 +402,9 @@ import Entidades.PlayerEntity;
 						player.getPlayerPosition().y/*+player.getHeight()/Constantes.PIXEL_A_METRO*/);
 				listaLaser.add(factory.createLaser(world, posicionLaser));
 				//sonido de disparo
-				laserDefensor.play();
+				if (FileManager.getUserData().isSonido()) {
+					laserDefensor.play();
+				}
 			}
 			//se comprueba que los lasers desaparecen solos al salir de la pantalla
 			for (int i = 0; i < listaLaser.size(); i++) {
@@ -458,7 +477,9 @@ import Entidades.PlayerEntity;
 							listaAliens.get(j).setAlive(false);
 							listaAliens.remove(j);
 							//efecto de sonido
-							expCorta.play();
+							if (FileManager.getUserData().isSonido()) {
+								expCorta.play();
+							}
 							//sumamos puntos
 							points+= 100;
 							//renombramos los aliens para que no de error por nulo
@@ -485,7 +506,9 @@ import Entidades.PlayerEntity;
 							listaAlienShooter.get(j).setAlive(false);
 							listaAlienShooter.remove(j);
 							//efecto de sonido
-							expCorta.play();
+							if (FileManager.getUserData().isSonido()) {
+								expCorta.play();
+							}
 							//sumamos puntos
 							points += 150;
 							//renombramos los aliens para que no de error por nulo
@@ -506,14 +529,15 @@ import Entidades.PlayerEntity;
 							if (hayContacto(contact, listaLaser.get(i).getName(), listaLaserAlien.get(j).getName())){
 								//muere los lasers
 								listaLaserAlien.get(j).setAlive(false);
-								listaLaserAlien.remove(j);
 								listaLaserAlien.get(j).cambiaGrupo();
+								listaLaserAlien.remove(j);
 								listaLaser.get(i).setAlive(false);
 								listaLaser.get(i).cambiaGrupo();
 								listaLaser.get(i).remove();
 								//efecto de sonido
-								expCorta.play();
-								//renombramos los lasers para que no de error por nulo
+								if (FileManager.getUserData().isSonido()) {
+									expCorta.play();
+								}								//renombramos los lasers para que no de error por nulo
 								for (int x = 0; x < listaLaserAlien.size(); x++) {
 									listaLaserAlien.get(x).setName(x);
 								}
@@ -529,7 +553,10 @@ import Entidades.PlayerEntity;
 				for (int i = 0; i < listaAliens.size();i++){
 					if(hayContacto(contact, "player", listaAliens.get(i).getName())) {
 						player.setAlive(false);
-						expLarga.play();
+						player.stopPlayer();
+						if (FileManager.getUserData().isSonido()) {
+							expLarga.play();
+						}
 					}
 				}
 
@@ -537,7 +564,10 @@ import Entidades.PlayerEntity;
 				for (int i = 0; i < listaLaserAlien.size();i++){
 					if(hayContacto(contact, "player", listaLaserAlien.get(i).getName())) {
 						player.setAlive(false);
-						expLarga.play();
+						player.stopPlayer();
+						if (FileManager.getUserData().isSonido()) {
+							expLarga.play();
+						}
 					}
 				}
 
