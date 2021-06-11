@@ -1,11 +1,11 @@
 [
     {
-        "merged": "D:\\Pabloooo\\Proyectos_Android\\ProyectoDam\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_ic_launcher.png.flat",
-        "source": "D:\\Pabloooo\\Proyectos_Android\\ProyectoDam\\android\\res\\drawable-xxxhdpi\\ic_launcher.png"
-    },
-    {
         "merged": "D:\\Pabloooo\\Proyectos_Android\\ProyectoDam\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher.png.flat",
         "source": "D:\\Pabloooo\\Proyectos_Android\\ProyectoDam\\android\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Pabloooo\\Proyectos_Android\\ProyectoDam\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_ic_launcher.png.flat",
+        "source": "D:\\Pabloooo\\Proyectos_Android\\ProyectoDam\\android\\res\\drawable-xxxhdpi\\ic_launcher.png"
     },
     {
         "merged": "D:\\Pabloooo\\Proyectos_Android\\ProyectoDam\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_ic_launcher.png.flat",
