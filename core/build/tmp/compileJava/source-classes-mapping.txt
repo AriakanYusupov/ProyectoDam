@@ -9,8 +9,8 @@ box2d/Box2DScreen.java
 com/spacegame/ScoreScreen.java
  com.spacegame.ScoreScreen
  com.spacegame.ScoreScreen$1
-com/spacegame/MainGame.java
- com.spacegame.MainGame
+scene2d/LaserAlienActor.java
+ scene2d.LaserAlienActor
 Entidades/AlienShooterEntity.java
  Entidades.AlienShooterEntity
 box2d/BodyDefFactory.java
@@ -30,10 +30,8 @@ com/spacegame/CambioScreen.java
  com.spacegame.CambioScreen$1
  com.spacegame.CambioScreen$2
  com.spacegame.CambioScreen$3
-com/spacegame/GameOverScreen.java
- com.spacegame.GameOverScreen
- com.spacegame.GameOverScreen$1
- com.spacegame.GameOverScreen$2
+scene2d/PlayerActor.java
+ scene2d.PlayerActor
 com/spacegame/Constantes.java
  com.spacegame.Constantes
 box2d/FixtureFactory.java
@@ -54,11 +52,11 @@ com/spacegame/ConstantesFisicas.java
  com.spacegame.ConstantesFisicas
 scene2d/AlienActor.java
  scene2d.AlienActor
-com/spacegame/GameScreen.java
- com.spacegame.GameScreen
- com.spacegame.GameScreen$1
- com.spacegame.GameScreen$2
- com.spacegame.GameScreen$GameContactListener
+com/spacegame/LogInScreen.java
+ com.spacegame.LogInScreen
+ com.spacegame.LogInScreen$1
+ com.spacegame.LogInScreen$2
+ com.spacegame.LogInScreen$3
 scene2d/AlienShooterActor.java
  scene2d.AlienShooterActor
 com/spacegame/UserData.java
@@ -76,12 +74,14 @@ com/spacegame/OptionScreen.java
  com.spacegame.OptionScreen$4
 com/spacegame/BaseScreen.java
  com.spacegame.BaseScreen
-scene2d/PlayerActor.java
- scene2d.PlayerActor
-scene2d/LaserAlienActor.java
- scene2d.LaserAlienActor
-com/spacegame/LogInScreen.java
- com.spacegame.LogInScreen
- com.spacegame.LogInScreen$1
- com.spacegame.LogInScreen$2
- com.spacegame.LogInScreen$3
+com/spacegame/GameScreen.java
+ com.spacegame.GameScreen
+ com.spacegame.GameScreen$1
+ com.spacegame.GameScreen$2
+ com.spacegame.GameScreen$GameContactListener
+com/spacegame/MainGame.java
+ com.spacegame.MainGame
+com/spacegame/GameOverScreen.java
+ com.spacegame.GameOverScreen
+ com.spacegame.GameOverScreen$1
+ com.spacegame.GameOverScreen$2
