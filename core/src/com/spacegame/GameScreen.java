@@ -218,8 +218,8 @@ import Entidades.PlayerEntity;
 					listaAliens.get(j).increaseAlienSpeed();
 				}
 				//cada 2 niveles se sube un poco la altura a la que aparecen para que haya más diversidad y sea más facil
-				if (nivel >0 && nivel % 2 == 0){
-					listaAliens.get(j).setPosition(listaAliens.get(j).getX(), (listaAliens.get(j).getY())*1.2f);
+				if (nivel >0 && nivel % 4 == 0){
+					listaAliens.get(j).setPosition(listaAliens.get(j).getX(), (listaAliens.get(j).getY())*1.1f);
 				}
 				// se añaden los aliens a la escena
 				stage.addActor(listaAliens.get(j));
@@ -323,7 +323,7 @@ import Entidades.PlayerEntity;
 			//disparos de los aliens
 			if(!listaAlienShooter.isEmpty()){
 				timer = timer + delta;
-				if (timer > 0.8f) {
+				if (timer > 0.5f) {
 					if (listaLaserAlien.size()-1 < (nivel - 3)) {
 						if (listaAlienShooter.size() == 1) {
 							//posicion del laser depende del alien que dispara
@@ -349,7 +349,7 @@ import Entidades.PlayerEntity;
 							i--;
 						}
 					}
-					timer =- 0.8f;
+					timer =- 0.5f;
 				}
 
 			}
